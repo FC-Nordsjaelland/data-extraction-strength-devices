@@ -26,10 +26,12 @@ max_date = datetime.datetime.strptime(max_date, '%Y-%m-%d')
 
 
 uploaded_files = st.file_uploader("Upload xlsx files below", type="xlsx", accept_multiple_files=True)
-if uploaded_files:
-    for file in uploaded_files:
-        file.seek(0)
-       
+
+try:
+    if uploaded_files:
+        for file in uploaded_files:
+            file.seek(0)
+
     uploaded_data_read = [pd.read_excel(file, header=None) for file in uploaded_files]
     st.write(uploaded_data_read)
     raw_data = pd.concat(uploaded_data_read)
@@ -38,6 +40,8 @@ if uploaded_files:
     min_date = raw_data[1].min()
     max_date = raw_data[1].max()
     st.dataframe(raw_data)
+except:
+    pass
 
 try:
     with st.form(key='my_form'):
