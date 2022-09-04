@@ -55,7 +55,7 @@ with st.form(key='my_form'):
     t_interval = st.slider("Select the time interval [min]", 0, 720, 30)
 
     output_name = st.text_input("Enter the output file name", "output")
-    st.form_submit_button()`
+    st.form_submit_button()
 
 
 
