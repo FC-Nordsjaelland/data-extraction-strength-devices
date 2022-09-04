@@ -18,21 +18,21 @@ st.text("")
 
 
 uploaded_files = st.file_uploader("Upload xlsx files below", type="xlsx", accept_multiple_files=True)
-try:
-    min_date = "2022-01-01"
-    min_date = datetime.datetime.strptime(min_date, '%Y-%m-%d')
-    max_date = "2023-01-01"
-    max_date = datetime.datetime.strptime(max_date, '%Y-%m-%d')
 
-    if uploaded_files:
-        for file in uploaded_files:
-            file.seek(0)
-        uploaded_data_read = [pd.read_excel(file, header=None) for file in uploaded_files]
-        raw_data = pd.concat(uploaded_data_read)
-        raw_data = raw_data[raw_data[0]=="Date"]
-        raw_data[1] = pd.to_datetime(raw_data[1], format='%d.%m.%Y %H:%M:%S')
-        min_date = raw_data[1].min()
-        max_date = raw_data[1].max()
+min_date = "2022-01-01"
+min_date = datetime.datetime.strptime(min_date, '%Y-%m-%d')
+max_date = "2023-01-01"
+max_date = datetime.datetime.strptime(max_date, '%Y-%m-%d')
+
+if uploaded_files:
+    for file in uploaded_files:
+        file.seek(0)
+    uploaded_data_read = [pd.read_excel(file, header=None) for file in uploaded_files]
+    raw_data = pd.concat(uploaded_data_read)
+    raw_data = raw_data[raw_data[0]=="Date"]
+    raw_data[1] = pd.to_datetime(raw_data[1], format='%d.%m.%Y %H:%M:%S')
+    min_date = raw_data[1].min()
+    max_date = raw_data[1].max()
 
     with st.form(key='my_form'):
 
@@ -56,8 +56,6 @@ try:
 
         output_name = st.text_input("Enter the output file name", "output")
         st.form_submit_button()
-except:
-    pass
 
 
 
