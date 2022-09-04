@@ -16,10 +16,9 @@ st.title("Strength data summary")
 st.text("")
 # st.header("**Instruction**")
 
+
+uploaded_files = st.file_uploader("Upload xlsx files below", type="xlsx", accept_multiple_files=True)
 try:
-
-    uploaded_files = st.file_uploader("Upload xlsx files below", type="xlsx", accept_multiple_files=True)
-
     min_date = "2022-01-01"
     min_date = datetime.datetime.strptime(min_date, '%Y-%m-%d')
     max_date = "2023-01-01"
