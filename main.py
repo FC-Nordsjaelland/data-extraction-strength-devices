@@ -29,6 +29,7 @@ uploaded_files = st.file_uploader("Upload xlsx files below", type="xlsx", accept
 if uploaded_files:
     for file in uploaded_files:
         file.seek(0)
+        st.write(file)
     try:
         uploaded_data_read = [pd.read_excel(file, header=None) for file in uploaded_files]
         raw_data = pd.concat(uploaded_data_read)
@@ -36,6 +37,7 @@ if uploaded_files:
         raw_data[1] = pd.to_datetime(raw_data[1], format='%d.%m.%Y %H:%M:%S')
         min_date = raw_data[1].min()
         max_date = raw_data[1].max()
+        st.dataframe(raw_data)
     except:
         pass
 
@@ -157,7 +159,6 @@ try:
     # end_date = datetime.datetime.combine(date2,t2)
     end_date = '2025-08-08 12:00:00'
     df = preprocess(uploaded_files=uploaded_files, start_date=start_date, end_date=end_date)
-    st.dataframe(raw_data)
     st.dataframe(df)
     
     csv = convert_df(df)
