@@ -24,38 +24,41 @@ min_date = datetime.datetime.strptime(min_date, '%Y-%m-%d')
 max_date = "2023-01-01"
 max_date = datetime.datetime.strptime(max_date, '%Y-%m-%d')
 
-if uploaded_files:
-    for file in uploaded_files:
-        file.seek(0)
-    uploaded_data_read = [pd.read_excel(file, header=None) for file in uploaded_files]
-    raw_data = pd.concat(uploaded_data_read)
-    raw_data = raw_data[raw_data[0]=="Date"]
-    raw_data[1] = pd.to_datetime(raw_data[1], format='%d.%m.%Y %H:%M:%S')
-    min_date = raw_data[1].min()
-    max_date = raw_data[1].max()
+try:
+    if uploaded_files:
+        for file in uploaded_files:
+            file.seek(0)
+        uploaded_data_read = [pd.read_excel(file, header=None) for file in uploaded_files]
+        raw_data = pd.concat(uploaded_data_read)
+        raw_data = raw_data[raw_data[0]=="Date"]
+        raw_data[1] = pd.to_datetime(raw_data[1], format='%d.%m.%Y %H:%M:%S')
+        min_date = raw_data[1].min()
+        max_date = raw_data[1].max()
 
-with st.form(key='my_form'):
+    with st.form(key='my_form'):
 
-    c1, c2 = st.columns(2)
-    # with c1:
-    #     date1 = st.date_input(
-    #         "Choose a start date",
-    #         min_date.date())
-    #     t1 = st.time_input('Choose a start time', datetime.time(0, 00))
-    # with c2: 
-    #     date2 = st.date_input(
-    #         "Choose an end date",
-    #         max_date.date())
-    #     t2 = st.time_input('Choose an end time', datetime.time(23, 45))
+        c1, c2 = st.columns(2)
+        # with c1:
+        #     date1 = st.date_input(
+        #         "Choose a start date",
+        #         min_date.date())
+        #     t1 = st.time_input('Choose a start time', datetime.time(0, 00))
+        # with c2: 
+        #     date2 = st.date_input(
+        #         "Choose an end date",
+        #         max_date.date())
+        #     t2 = st.time_input('Choose an end time', datetime.time(23, 45))
 
-    date1 = st.date_input(
-            "Choose a testing date",
-            min_date.date())
-    t1 = st.time_input("Choose the time of the testing", datetime.time(12,30))
-    t_interval = st.slider("Select the time interval [min]", 0, 720, 30)
+        date1 = st.date_input(
+                "Choose a testing date",
+                min_date.date())
+        t1 = st.time_input("Choose the time of the testing", datetime.time(12,30))
+        t_interval = st.slider("Select the time interval [min]", 0, 720, 30)
 
-    output_name = st.text_input("Enter the output file name", "output")
-    st.form_submit_button()
+        output_name = st.text_input("Enter the output file name", "output")
+        st.form_submit_button()
+except:
+    pass
 
 
 
@@ -149,7 +152,7 @@ try:
     # end_date = datetime.datetime.combine(date2,t2)
     end_date = '2025-08-08 12:00:00'
     df = preprocess(uploaded_files=uploaded_files, start_date=start_date, end_date=end_date)
-    # st.dataframe(df)
+    st.dataframe(df)
     csv = convert_df(df)
 
     st.download_button(
