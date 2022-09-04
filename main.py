@@ -29,9 +29,9 @@ uploaded_files = st.file_uploader("Upload xlsx files below", type="xlsx", accept
 
 try:
     if uploaded_files:
-        # for file in uploaded_files:
-        #     file.seek(0)
-
+        for file in uploaded_files:
+            file.seek(0)
+        st.write("Hey")
         uploaded_data_read = [pd.read_excel(file, header=None) for file in uploaded_files]
         st.write(uploaded_data_read)
         raw_data = pd.concat(uploaded_data_read)
