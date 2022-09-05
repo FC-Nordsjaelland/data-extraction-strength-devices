@@ -162,7 +162,7 @@ start_date = datetime.datetime.combine(date1,t1)
 end_date = '2025-08-08 12:00:00'
 try:
     df = preprocess(uploaded_files=uploaded_files, start_date=start_date, end_date=end_date)
-    st.dataframe(df)
+    # st.dataframe(df)
     csv = convert_df(df)
 
     st.download_button(
