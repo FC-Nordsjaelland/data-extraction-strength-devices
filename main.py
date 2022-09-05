@@ -31,7 +31,8 @@ try:
     if uploaded_files:
         for file in uploaded_files:
             file.seek(0)
-            st.write(file)
+            x = pd.read_excel(file, header=None) 
+            st.dataframe(x)
             #pd.read_excel
             #st.dataframe()
             
