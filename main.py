@@ -6,7 +6,7 @@ import warnings
 import datetime
 from datetime import time
 import streamlit as st
-warnings.filterwarnings("ignore")
+# warnings.filterwarnings("ignore")
 
 #%%
 
