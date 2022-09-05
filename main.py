@@ -85,16 +85,15 @@ def convert_df(df):
     return df.to_csv(index=False).encode('utf-8')
 
 
+min_date = "2022-01-01"
+min_date = datetime.datetime.strptime(min_date, '%Y-%m-%d')
+max_date = "2023-01-01"
+max_date = datetime.datetime.strptime(max_date, '%Y-%m-%d')
+
+uploaded_files = st.file_uploader("Upload xlsx files below", type="xlsx", accept_multiple_files=True)
+
+
 try:
-    min_date = "2022-01-01"
-    min_date = datetime.datetime.strptime(min_date, '%Y-%m-%d')
-    max_date = "2023-01-01"
-    max_date = datetime.datetime.strptime(max_date, '%Y-%m-%d')
-
-
-
-
-    uploaded_files = st.file_uploader("Upload xlsx files below", type="xlsx", accept_multiple_files=True)
 
     if uploaded_files:
         x = []
@@ -151,11 +150,6 @@ try:
 
     # start_datetime = datetime.strptime(start_date, '%Y-%m-%d %H:%M:%S')
     # end_datetime = datetime.strptime(end_date, '%Y-%m-%d %H:%M:%S')
-
-
-
-
-    # %%
 
         start_date = datetime.datetime.combine(date1,t1)
         # end_date = datetime.datetime.combine(date2,t2)
