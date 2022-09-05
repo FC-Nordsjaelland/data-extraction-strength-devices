@@ -161,7 +161,7 @@ start_date = datetime.datetime.combine(date1,t1)
 # end_date = datetime.datetime.combine(date2,t2)
 end_date = '2025-08-08 12:00:00'
 try:
-    df = preprocess(uploaded_files=uploaded_files, start_date=start_date, end_date=end_date)
+    df = preprocess(uploaded_files=raw_data, start_date=start_date, end_date=end_date)
     # st.dataframe(df)
     csv = convert_df(df)
 
