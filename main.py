@@ -92,10 +92,11 @@ max_date = datetime.datetime.strptime(max_date, '%Y-%m-%d')
 
 uploaded_files = st.file_uploader("Upload xlsx files below", type="xlsx", accept_multiple_files=True)
 
+if uploaded_files:
 
-try:
+    try:
 
-    if uploaded_files:
+    
         x = []
         for file in uploaded_files:
             file.seek(0)
@@ -109,28 +110,28 @@ try:
 
 
 
-    with st.form(key='my_form'):
+        with st.form(key='my_form'):
 
-        c1, c2 = st.columns(2)
-        # with c1:
-        #     date1 = st.date_input(
-        #         "Choose a start date",
-        #         min_date.date())
-        #     t1 = st.time_input('Choose a start time', datetime.time(0, 00))
-        # with c2: 
-        #     date2 = st.date_input(
-        #         "Choose an end date",
-        #         max_date.date())
-        #     t2 = st.time_input('Choose an end time', datetime.time(23, 45))
+            c1, c2 = st.columns(2)
+            # with c1:
+            #     date1 = st.date_input(
+            #         "Choose a start date",
+            #         min_date.date())
+            #     t1 = st.time_input('Choose a start time', datetime.time(0, 00))
+            # with c2: 
+            #     date2 = st.date_input(
+            #         "Choose an end date",
+            #         max_date.date())
+            #     t2 = st.time_input('Choose an end time', datetime.time(23, 45))
 
-        date1 = st.date_input(
-                "Choose a testing date",
-                min_date.date())
-        t1 = st.time_input("Choose the time of the testing", datetime.time(12,30))
-        t_interval = st.slider("Select the time interval [min]", 0, 720, 30)
+            date1 = st.date_input(
+                    "Choose a testing date",
+                    min_date.date())
+            t1 = st.time_input("Choose the time of the testing", datetime.time(12,30))
+            t_interval = st.slider("Select the time interval [min]", 0, 720, 30)
 
-        output_name = st.text_input("Enter the output file name", "output")
-        st.form_submit_button()
+            output_name = st.text_input("Enter the output file name", "output")
+            st.form_submit_button()
 
 
 
@@ -151,20 +152,21 @@ try:
     # start_datetime = datetime.strptime(start_date, '%Y-%m-%d %H:%M:%S')
     # end_datetime = datetime.strptime(end_date, '%Y-%m-%d %H:%M:%S')
 
-    start_date = datetime.datetime.combine(date1,t1)
-    # end_date = datetime.datetime.combine(date2,t2)
-    end_date = '2025-08-08 12:00:00'
-    df = preprocess(uploaded_files=uploaded_files, start_date=start_date, end_date=end_date)
-    st.dataframe(df)
-    
-    csv = convert_df(df)
+        start_date = datetime.datetime.combine(date1,t1)
+        # end_date = datetime.datetime.combine(date2,t2)
+        end_date = '2025-08-08 12:00:00'
+        df = preprocess(uploaded_files=uploaded_files, start_date=start_date, end_date=end_date)
+        st.dataframe(df)
+        
+        csv = convert_df(df)
 
-    st.download_button(
-    "Press to Download",
-    csv,
-    output_name + ".csv",
-    "text/csv",
-    key='download-csv'
-    )
-except:
-    pass
+        st.download_button(
+        "Press to Download",
+        csv,
+        output_name + ".csv",
+        "text/csv",
+        key='download-csv'
+        )
+
+    except:
+        pass
