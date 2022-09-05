@@ -32,21 +32,15 @@ try:
         x = []
         for file in uploaded_files:
             file.seek(0)
-            x.append(pd.read_excel(file, header=None))
-            
-            #pd.read_excel
-            #st.dataframe()
-            
-        # uploaded_data_read = [pd.read_excel(file, header=None) for file in uploaded_files]
-        # raw_data = pd.concat(uploaded_data_read)
-        # raw_data = raw_data[raw_data[0]=="Date"]
-        # raw_data[1] = pd.to_datetime(raw_data[1], format='%d.%m.%Y %H:%M:%S')
-        # min_date = raw_data[1].min()
-        # max_date = raw_data[1].max()
+               
+        uploaded_data_read = [pd.read_excel(file, header=None) for file in uploaded_files]
+        raw_data = pd.concat(uploaded_data_read)
+        raw_data = raw_data[raw_data[0]=="Date"]
+        raw_data[1] = pd.to_datetime(raw_data[1], format='%d.%m.%Y %H:%M:%S')
+        min_date = raw_data[1].min()
+        max_date = raw_data[1].max()
 except:
     pass
-
-st.write(x)
 
 
 try:
