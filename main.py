@@ -33,7 +33,7 @@ try:
         for file in uploaded_files:
             file.seek(0)
             x.append(pd.read_excel(file, header=None))
-            st.write(x)
+            
             #pd.read_excel
             #st.dataframe()
             
@@ -45,6 +45,8 @@ try:
         # max_date = raw_data[1].max()
 except:
     pass
+
+st.write(x)
 
 
 try:
