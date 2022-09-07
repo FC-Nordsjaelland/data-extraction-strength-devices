@@ -76,7 +76,7 @@ def preprocess(uploaded_files, start_date, end_date):
     final_df = final_df.sort_values(by=['Name'])
     final_df['Max left'] = final_df['Max left'].round(decimals=1)
     final_df['Max right'] = final_df['Max right'].round(decimals=1)
-    # final_df = final_df.drop(["time_difference"], axis=1)
+    final_df = final_df.drop(["time_difference"], axis=1)
     final_df = final_df.reset_index(drop=True)
    
     return final_df
@@ -92,21 +92,19 @@ max_date = datetime.datetime.strptime(max_date, '%Y-%m-%d')
 
 
 
-try:
-    uploaded_files = st.file_uploader("Upload xlsx files below", type="xlsx", accept_multiple_files=True)
 
-    if uploaded_files:
-        for file in uploaded_files:
-            file.seek(0)
-                
-        uploaded_data_read = [pd.read_excel(file, header=None) for file in uploaded_files]
-        raw_data = pd.concat(uploaded_data_read)
-        raw_data = raw_data[raw_data[0]=="Date"]
-        raw_data[1] = pd.to_datetime(raw_data[1], format='%d.%m.%Y %H:%M:%S')
-        min_date = raw_data[1].min()
-        max_date = raw_data[1].max()
-except:
-    pass
+uploaded_files = st.file_uploader("Upload xlsx files below", type="xlsx", accept_multiple_files=True)
+
+if uploaded_files:
+    for file in uploaded_files:
+        file.seek(0)
+        
+    uploaded_data_read = [pd.read_excel(file, header=None) for file in uploaded_files]
+    raw_data = pd.concat(uploaded_data_read)
+    raw_data = raw_data[raw_data[0]=="Date"]
+    raw_data[1] = pd.to_datetime(raw_data[1], format='%d.%m.%Y %H:%M:%S')
+    min_date = raw_data[1].min()
+    max_date = raw_data[1].max()
 
 
 
@@ -128,7 +126,7 @@ with st.form(key='my_form'):
             "Choose a testing date",
             min_date.date())
     t1 = st.time_input("Choose the time of the testing", datetime.time(12,30))
-    t_interval = st.slider("Select the time interval [min]", 0, 720, 30)
+    t_interval = st.slider("Select the time interval [min]", 1, 720, 30)
 
     output_name = st.text_input("Enter the output file name", "output")
     st.form_submit_button()
@@ -159,19 +157,16 @@ with st.form(key='my_form'):
 start_date = datetime.datetime.combine(date1,t1)
 # end_date = datetime.datetime.combine(date2,t2)
 end_date = '2025-08-08 12:00:00'
-try:
-    df = preprocess(uploaded_files=raw_data, start_date=start_date, end_date=end_date)
-    st.dataframe(df)
-    csv = convert_df(df)
 
-    st.download_button(
-    "Press to Download",
-    csv,
-    output_name + ".csv",
-    "text/csv",
-    key='download-csv'
-    )
-    
-except:
-    pass
+df = preprocess(uploaded_files=uploaded_files, start_date=start_date, end_date=end_date)
+st.dataframe(df)
+csv = convert_df(df)
+
+st.download_button(
+"Press to Download",
+csv,
+output_name + ".csv",
+"text/csv",
+key='download-csv'
+)
 
