@@ -119,20 +119,16 @@ if uploaded_files is not None:
     st.write("Checkpoint1")
     uploaded_data_read = []
     for file in uploaded_files:
-        bytes_data = file.read()
-
-        st.write("File uploaded", file.name)
-        st.write(bytes_data)
-        # file.seek(0)
-        # try:
-        #     st.write("Checkpoint1a")
-        #     x = pd.read_excel(file.name, header=None)
-        #     st.write(file.name, " read")
-        #     uploaded_data_read.append(x)
-        #     st.write("Checkpoint1c")
-        #     st.write(uploaded_data_read)
-        # except:
-        #     pass
+        file.seek(0)
+        try:
+            st.write("Checkpoint1a")
+            x = pd.read_excel(file.name, header=None, engine='openpyxl')
+            st.dataframe(x)
+            uploaded_data_read.append(x)
+            st.write("Checkpoint1c")
+            st.write(uploaded_data_read)
+        except:
+            pass
 
         
     # try:
