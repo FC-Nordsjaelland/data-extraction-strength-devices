@@ -84,88 +84,85 @@ def preprocess(uploaded_files, start_date, end_date):
 def convert_df(df):
     return df.to_csv(index=False).encode('utf-8')
 
-try:
-
-    min_date = "2022-01-01"
-    min_date = datetime.datetime.strptime(min_date, '%Y-%m-%d')
-    max_date = "2023-01-01"
-    max_date = datetime.datetime.strptime(max_date, '%Y-%m-%d')
+min_date = "2022-01-01"
+min_date = datetime.datetime.strptime(min_date, '%Y-%m-%d')
+max_date = "2023-01-01"
+max_date = datetime.datetime.strptime(max_date, '%Y-%m-%d')
 
 
 
 
-    uploaded_files = st.file_uploader("Upload xlsx files below", type="xlsx", accept_multiple_files=True)
+uploaded_files = st.file_uploader("Upload xlsx files below", type="xlsx", accept_multiple_files=True)
 
-    if uploaded_files:
-        for file in uploaded_files:
-            file.seek(0)
-            
-        uploaded_data_read = [pd.read_excel(file, header=None) for file in uploaded_files]
-        raw_data = pd.concat(uploaded_data_read)
-        raw_data = raw_data[raw_data[0]=="Date"]
-        raw_data[1] = pd.to_datetime(raw_data[1], format='%d.%m.%Y %H:%M:%S')
-        min_date = raw_data[1].min()
-        max_date = raw_data[1].max()
+if uploaded_files:
+    for file in uploaded_files:
+        file.seek(0)
+        
+    uploaded_data_read = [pd.read_excel(file, header=None) for file in uploaded_files]
+    raw_data = pd.concat(uploaded_data_read)
+    raw_data = raw_data[raw_data[0]=="Date"]
+    raw_data[1] = pd.to_datetime(raw_data[1], format='%d.%m.%Y %H:%M:%S')
+    min_date = raw_data[1].min()
+    max_date = raw_data[1].max()
 
 
 
-    with st.form(key='my_form'):
+with st.form(key='my_form'):
 
-        c1, c2 = st.columns(2)
-        # with c1:
-        #     date1 = st.date_input(
-        #         "Choose a start date",
-        #         min_date.date())
-        #     t1 = st.time_input('Choose a start time', datetime.time(0, 00))
-        # with c2: 
-        #     date2 = st.date_input(
-        #         "Choose an end date",
-        #         max_date.date())
-        #     t2 = st.time_input('Choose an end time', datetime.time(23, 45))
+    c1, c2 = st.columns(2)
+    # with c1:
+    #     date1 = st.date_input(
+    #         "Choose a start date",
+    #         min_date.date())
+    #     t1 = st.time_input('Choose a start time', datetime.time(0, 00))
+    # with c2: 
+    #     date2 = st.date_input(
+    #         "Choose an end date",
+    #         max_date.date())
+    #     t2 = st.time_input('Choose an end time', datetime.time(23, 45))
 
-        date1 = st.date_input(
-                "Choose a testing date",
-                min_date.date())
-        t1 = st.time_input("Choose the time of the testing", datetime.time(12,30))
-        t_interval = st.slider("Select the time interval [min]", 1, 720, 30)
+    date1 = st.date_input(
+            "Choose a testing date",
+            min_date.date())
+    t1 = st.time_input("Choose the time of the testing", datetime.time(12,30))
+    t_interval = st.slider("Select the time interval [min]", 1, 720, 30)
 
-        output_name = st.text_input("Enter the output file name", "output")
-        st.form_submit_button()
+    output_name = st.text_input("Enter the output file name", "output")
+    st.form_submit_button()
 
 
 
 
 
 
-    # path = input("Enter the directory path where the Excel files are stored: ")
-    # path2 = input("Enter the directory path where the CSV output is saved: ")
-    # date1 = input("Enter the starting date and time (format - 2022-03-04 12:00:00): ")
-    # date2 = input("Enter the end date (format - 2022-03-04 12:00:00): ")
-    # name = input("Enter the output file name: ")
+# path = input("Enter the directory path where the Excel files are stored: ")
+# path2 = input("Enter the directory path where the CSV output is saved: ")
+# date1 = input("Enter the starting date and time (format - 2022-03-04 12:00:00): ")
+# date2 = input("Enter the end date (format - 2022-03-04 12:00:00): ")
+# name = input("Enter the output file name: ")
 
-    #start_datetime = datetime.strptime('2022-03-04 12:00:00', '%Y-%m-%d %H:%M:%S')
+#start_datetime = datetime.strptime('2022-03-04 12:00:00', '%Y-%m-%d %H:%M:%S')
 
-    # start_date = date1 + t1
-    # end_date = date2 + t2
+# start_date = date1 + t1
+# end_date = date2 + t2
 
-    # start_datetime = datetime.strptime(start_date, '%Y-%m-%d %H:%M:%S')
-    # end_datetime = datetime.strptime(end_date, '%Y-%m-%d %H:%M:%S')
+# start_datetime = datetime.strptime(start_date, '%Y-%m-%d %H:%M:%S')
+# end_datetime = datetime.strptime(end_date, '%Y-%m-%d %H:%M:%S')
 
-        # %%
-        start_date = datetime.datetime.combine(date1,t1)
-        # end_date = datetime.datetime.combine(date2,t2)
-        end_date = '2025-08-08 12:00:00'
+    # %%
+start_date = datetime.datetime.combine(date1,t1)
+# end_date = datetime.datetime.combine(date2,t2)
+end_date = '2025-08-08 12:00:00'
 
-        df = preprocess(uploaded_files=uploaded_files, start_date=start_date, end_date=end_date)
-        st.dataframe(df)
-        csv = convert_df(df)
+df = preprocess(uploaded_files=uploaded_files, start_date=start_date, end_date=end_date)
+st.dataframe(df)
+csv = convert_df(df)
 
-        st.download_button(
-        "Press to Download",
-        csv,
-        output_name + ".csv",
-        "text/csv",
-        key='download-csv'
-        )
-except:
-    pass
+st.download_button(
+"Press to Download",
+csv,
+output_name + ".csv",
+"text/csv",
+key='download-csv'
+)
+
