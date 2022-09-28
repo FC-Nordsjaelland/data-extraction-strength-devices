@@ -122,7 +122,9 @@ if len(uploaded_files) > 3:
     try:
         st.write("Checkpoint2")
         uploaded_data_read = [pd.read_excel(file, header=None) for file in uploaded_files]
+        st.write("Checkpoint3")
         raw_data = pd.concat(uploaded_data_read)
+        st.write("Checkpoint4")
         raw_data = raw_data[raw_data[0]=="Date"]
         raw_data[1] = pd.to_datetime(raw_data[1], format='%d.%m.%Y %H:%M:%S')
         min_date = raw_data[1].min()
