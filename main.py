@@ -97,8 +97,10 @@ uploaded_files = st.file_uploader("Upload xlsx files below", type="xlsx", accept
 if uploaded_files:
     for file in uploaded_files:
         file.seek(0)
-        
-    uploaded_data_read = [pd.read_excel(file, header=None) for file in uploaded_files]
+    try:
+        uploaded_data_read = [pd.read_excel(file, header=None) for file in uploaded_files]
+    except:
+        pass
     raw_data = pd.concat(uploaded_data_read)
     raw_data = raw_data[raw_data[0]=="Date"]
     raw_data[1] = pd.to_datetime(raw_data[1], format='%d.%m.%Y %H:%M:%S')
