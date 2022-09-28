@@ -118,17 +118,17 @@ uploaded_files = st.file_uploader("Upload xlsx files below", type="xlsx", accept
 if uploaded_files is not None:
     st.write("Checkpoint1")
     uploaded_data_read = []
-    for file in uploaded_files:
-        file.seek(0)
-        try:
+    try:
+        for file in uploaded_files:
+            file.seek(0)
             st.write("Checkpoint1a")
             x = pd.read_excel(file.name, header=None, engine='openpyxl')
             st.dataframe(x)
             uploaded_data_read.append(x)
             st.write("Checkpoint1c")
             st.write(uploaded_data_read)
-        except:
-            pass
+    except:
+        pass
 
         
     # try:
