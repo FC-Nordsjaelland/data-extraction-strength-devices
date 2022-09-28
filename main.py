@@ -125,6 +125,7 @@ if len(uploaded_files) > 3:
             st.write("Checkpoint1b")
             uploaded_data_read.append(x)
             st.write("Checkpoint1c")
+            st.write(uploaded_data_read)
         except:
             pass
 
