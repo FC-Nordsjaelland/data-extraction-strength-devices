@@ -156,13 +156,14 @@ try:
     df = preprocess(uploaded_files=uploaded_files, start_date=start_date, end_date=end_date)
     st.dataframe(df)
     csv = convert_df(df)
+
+    st.download_button(
+    "Press to Download",
+    csv,
+    output_name + ".csv",
+    "text/csv",
+    key='download-csv'
+    )
 except:
     pass
-st.download_button(
-"Press to Download",
-csv,
-output_name + ".csv",
-"text/csv",
-key='download-csv'
-)
 
