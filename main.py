@@ -112,39 +112,41 @@ with st.form(key='my_form'):
     st.form_submit_button()
 
 
-
-uploaded_files = st.file_uploader("Upload xlsx files below", type="xlsx", accept_multiple_files=True)
-
-if uploaded_files is not None:
-    st.write("Checkpoint1")
-    uploaded_data_read = []
-    try:
-        for file in uploaded_files:
-            file.seek(0)
-            st.write("Checkpoint1a")
-            x = pd.read_excel(file.name, header=None, engine='openpyxl')
-            st.dataframe(x)
-            uploaded_data_read.append(x)
-            st.write("Checkpoint1c")
-            st.write(uploaded_data_read)
-    except:
-        pass
-
+with st.form("my-form", clear_on_submit=True):
+    
+    uploaded_files = st.file_uploader("Upload xlsx files below", type="xlsx", accept_multiple_files=True)
+    submitted = st.form_submit_button("UPLOAD!")
         
-    # try:
-    #     st.write("Checkpoint2")
-    #     uploaded_data_read = [pd.read_excel(file, header=None) for file in uploaded_files]
-    #     st.write("Checkpoint3")
-    #     raw_data = pd.concat(uploaded_data_read)
-    #     st.write("Checkpoint4")
-    #     raw_data = raw_data[raw_data[0]=="Date"]
-    #     raw_data[1] = pd.to_datetime(raw_data[1], format='%d.%m.%Y %H:%M:%S')
-    #     min_date = raw_data[1].min()
-    #     max_date = raw_data[1].max()
-    # except:
-    #     pass
-else:
-    st.warning("Upload the excel files")
+    if uploaded_files is not None:
+        st.write("Checkpoint1")
+        uploaded_data_read = []
+        try:
+            for file in uploaded_files:
+                file.seek(0)
+                st.write("Checkpoint1a")
+                x = pd.read_excel(file.name, header=None, engine='openpyxl')
+                st.dataframe(x)
+                uploaded_data_read.append(x)
+                st.write("Checkpoint1c")
+                st.write(uploaded_data_read)
+        except:
+            pass
+
+            
+        # try:
+        #     st.write("Checkpoint2")
+        #     uploaded_data_read = [pd.read_excel(file, header=None) for file in uploaded_files]
+        #     st.write("Checkpoint3")
+        #     raw_data = pd.concat(uploaded_data_read)
+        #     st.write("Checkpoint4")
+        #     raw_data = raw_data[raw_data[0]=="Date"]
+        #     raw_data[1] = pd.to_datetime(raw_data[1], format='%d.%m.%Y %H:%M:%S')
+        #     min_date = raw_data[1].min()
+        #     max_date = raw_data[1].max()
+        # except:
+        #     pass
+    else:
+        st.warning("Upload the excel files")
 
 
 
