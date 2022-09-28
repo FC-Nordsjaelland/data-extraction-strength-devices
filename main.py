@@ -151,8 +151,6 @@ if uploaded_files:
     except:
         pass
 
-st.dataframe(raw_data)
-
 
 
 
