@@ -117,9 +117,13 @@ uploaded_files = st.file_uploader("Upload xlsx files below", type="xlsx", accept
 
 if len(uploaded_files) > 3:
     st.write("Checkpoint1")
+    uploaded_data_read = []
     for file in uploaded_files:
-        st.write(file)
-        file.seek(0)
+        x = pd.read_excel(file, header=None)
+        uploaded_data_read.append(x)
+        # file.seek(0)
+    st.write("success")
+    st.write(uploaded_data_read)
     try:
         st.write("Checkpoint2")
         uploaded_data_read = [pd.read_excel(file, header=None) for file in uploaded_files]
