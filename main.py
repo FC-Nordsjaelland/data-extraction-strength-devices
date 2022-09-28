@@ -129,25 +129,29 @@ if uploaded_files:
         min_date = raw_data[1].min()
         max_date = raw_data[1].max()
 
-            # %%
-        start_date = datetime.datetime.combine(date1,t1)
-        # end_date = datetime.datetime.combine(date2,t2)
-        end_date = '2025-08-08 12:00:00'
+    #         # %%
+    #     start_date = datetime.datetime.combine(date1,t1)
+    #     # end_date = datetime.datetime.combine(date2,t2)
+    #     end_date = '2025-08-08 12:00:00'
 
-        df = preprocess(uploaded_files=uploaded_files, start_date=start_date, end_date=end_date)
-        st.dataframe(df)
-        csv = convert_df(df)
+    #     df = preprocess(uploaded_files=uploaded_files, start_date=start_date, end_date=end_date)
+    #     st.dataframe(df)
+    #     csv = convert_df(df)
 
-        st.download_button(
-        "Press to Download",
-        csv,
-        output_name + ".csv",
-        "text/csv",
-        key='download-csv'
-        )
+    #     st.download_button(
+    #     "Press to Download",
+    #     csv,
+    #     output_name + ".csv",
+    #     "text/csv",
+    #     key='download-csv'
+    #     )
 
+
+        st.dataframe(raw_data)
     except:
         pass
+
+
 
 
 
