@@ -118,6 +118,7 @@ uploaded_files = st.file_uploader("Upload xlsx files below", type="xlsx", accept
 if len(uploaded_files) > 3:
     st.write("Checkpoint1")
     for file in uploaded_files:
+        st.write(file)
         file.seek(0)
     try:
         st.write("Checkpoint2")
