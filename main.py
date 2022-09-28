@@ -95,13 +95,16 @@ uploaded_files = st.file_uploader("Upload xlsx files below", type="xlsx", accept
 if uploaded_files is not None:
     uploaded_data_read = []
     
-    for file in uploaded_files:
-        uploaded_data_read = [pd.read_excel(file, header=None) for file in uploaded_files]
-        raw_data = pd.concat(uploaded_data_read)
-        raw_data = raw_data[raw_data[0]=="Date"]
-        raw_data[1] = pd.to_datetime(raw_data[1], format='%d.%m.%Y %H:%M:%S')
-        min_date = raw_data[1].min()
-        max_date = raw_data[1].max()
+    try:
+        for file in uploaded_files:
+            uploaded_data_read = [pd.read_excel(file, header=None) for file in uploaded_files]
+            raw_data = pd.concat(uploaded_data_read)
+            raw_data = raw_data[raw_data[0]=="Date"]
+            raw_data[1] = pd.to_datetime(raw_data[1], format='%d.%m.%Y %H:%M:%S')
+            min_date = raw_data[1].min()
+            max_date = raw_data[1].max()
+    except:
+        pass
 
 
 
