@@ -119,6 +119,7 @@ if uploaded_files is not None:
     st.write("Checkpoint1")
     uploaded_data_read = []
     for file in uploaded_files:
+        file.seek(0)
         try:
             st.write("Checkpoint1a")
             x = pd.read_excel(file.name, header=None)
@@ -129,9 +130,7 @@ if uploaded_files is not None:
         except:
             pass
 
-        # file.seek(0)
-    st.write("success")
-    st.write(uploaded_data_read)
+        
     try:
         st.write("Checkpoint2")
         uploaded_data_read = [pd.read_excel(file, header=None) for file in uploaded_files]
