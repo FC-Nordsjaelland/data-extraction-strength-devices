@@ -3,7 +3,7 @@ import pandas as pd
 import datetime
 from datetime import time
 import streamlit as st
-from st_aggrid import AgGrid
+# from st_aggrid import AgGrid
 # warnings.filterwarnings("ignore")
 
 #%%
@@ -171,7 +171,8 @@ start_date = datetime.datetime.combine(date1,t1)
 end_date = '2025-08-08 12:00:00'
 
 df = preprocess(uploaded_files=uploaded_files, start_date=start_date, end_date=end_date)
-AgGrid(df, fit_columns_on_grid_load=True)
+# AgGrid(df, fit_columns_on_grid_load=True)
+st.dataframe(df)
 csv = convert_df(df)
 
 st.download_button(
