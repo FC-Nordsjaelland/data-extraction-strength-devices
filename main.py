@@ -3,6 +3,7 @@ import pandas as pd
 import datetime
 from datetime import time
 import streamlit as st
+from st_aggrid import AgGrid
 # warnings.filterwarnings("ignore")
 
 #%%
@@ -75,6 +76,7 @@ def preprocess(uploaded_files, start_date, end_date):
     final_df['Max right'] = final_df['Max right'].round(decimals=1)
     final_df = final_df.drop(["time_difference"], axis=1)
     final_df = final_df.reset_index(drop=True)
+    final_df = final_df[['Name', 'Device', 'Team', 'Date','Max left', 'Max right', 'Comment']]
    
     return final_df
 
@@ -85,6 +87,21 @@ min_date = "2022-01-01"
 min_date = datetime.datetime.strptime(min_date, '%Y-%m-%d')
 max_date = "2023-01-01"
 max_date = datetime.datetime.strptime(max_date, '%Y-%m-%d')
+
+
+    
+uploaded_files = st.file_uploader("Upload xlsx files below", type="xlsx", accept_multiple_files=True)
+    
+if uploaded_files is not None:
+    uploaded_data_read = []
+    
+    for file in uploaded_files:
+        uploaded_data_read = [pd.read_excel(file, header=None) for file in uploaded_files]
+        raw_data = pd.concat(uploaded_data_read)
+        raw_data = raw_data[raw_data[0]=="Date"]
+        raw_data[1] = pd.to_datetime(raw_data[1], format='%d.%m.%Y %H:%M:%S')
+        min_date = raw_data[1].min()
+        max_date = raw_data[1].max()
 
 
 
@@ -112,26 +129,7 @@ with st.form(key='my_form'):
     st.form_submit_button()
 
 
-with st.form("my-form", clear_on_submit=True):
-    
-    uploaded_files = st.file_uploader("Upload xlsx files below", type="xlsx", accept_multiple_files=True)
-    submitted = st.form_submit_button("UPLOAD!")
-        
-    if uploaded_files is not None:
-        st.write("Checkpoint1")
-        uploaded_data_read = []
-        try:
-            for file in uploaded_files:
-                file.seek(0)
-                st.write("Checkpoint1a")
-                st.write(file.name)
-                x = pd.read_excel(file, header=None, engine='openpyxl')
-                st.dataframe(x)
-                uploaded_data_read.append(x)
-                st.write("Checkpoint1c")
-                st.write(uploaded_data_read)
-        except:
-            pass
+
 
             
         # try:
@@ -146,8 +144,6 @@ with st.form("my-form", clear_on_submit=True):
         #     max_date = raw_data[1].max()
         # except:
         #     pass
-    else:
-        st.warning("Upload the excel files")
 
 
 
@@ -174,19 +170,16 @@ start_date = datetime.datetime.combine(date1,t1)
 # end_date = datetime.datetime.combine(date2,t2)
 end_date = '2025-08-08 12:00:00'
 
-try:
-    st.dataframe(raw_data)
-    df = preprocess(uploaded_files=uploaded_files, start_date=start_date, end_date=end_date)
-    st.dataframe(df)
-    csv = convert_df(df)
+df = preprocess(uploaded_files=uploaded_files, start_date=start_date, end_date=end_date)
+AgGrid(df, fit_columns_on_grid_load=True)
+csv = convert_df(df)
 
-    st.download_button(
-    "Press to Download",
-    csv,
-    output_name + ".csv",
-    "text/csv",
-    key='download-csv'
-    )
-except:
-    pass
+st.download_button(
+"Press to Download",
+csv,
+output_name + ".csv",
+"text/csv",
+key='download-csv'
+)
+
 
