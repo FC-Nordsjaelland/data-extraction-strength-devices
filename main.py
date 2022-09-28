@@ -120,6 +120,7 @@ if len(uploaded_files) > 3:
     for file in uploaded_files:
         file.seek(0)
     try:
+        st.write("Checkpoint2")
         uploaded_data_read = [pd.read_excel(file, header=None) for file in uploaded_files]
         raw_data = pd.concat(uploaded_data_read)
         raw_data = raw_data[raw_data[0]=="Date"]
