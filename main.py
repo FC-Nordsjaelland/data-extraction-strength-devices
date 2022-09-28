@@ -91,7 +91,7 @@ max_date = datetime.datetime.strptime(max_date, '%Y-%m-%d')
 
 uploaded_files = st.file_uploader("Upload xlsx files below", type="xlsx", accept_multiple_files=True)
 
-if uploaded_files:
+if len(uploaded_files) > 3:
     for file in uploaded_files:
         file.seek(0)
     try:
