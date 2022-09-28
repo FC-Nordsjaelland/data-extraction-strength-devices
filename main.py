@@ -124,6 +124,7 @@ with st.form("my-form", clear_on_submit=True):
             for file in uploaded_files:
                 file.seek(0)
                 st.write("Checkpoint1a")
+                st.write(file.name)
                 x = pd.read_excel(file.name, header=None, engine='openpyxl')
                 st.dataframe(x)
                 uploaded_data_read.append(x)
