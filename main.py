@@ -118,38 +118,38 @@ uploaded_files = st.file_uploader("Upload xlsx files below", type="xlsx", accept
 #             st.form_submit_button()
 
 
-if uploaded_files:
-    for file in uploaded_files:
-        file.seek(0)
-    try:
-        uploaded_data_read = [pd.read_excel(file, header=None) for file in uploaded_files]
-        raw_data = pd.concat(uploaded_data_read)
-        raw_data = raw_data[raw_data[0]=="Date"]
-        raw_data[1] = pd.to_datetime(raw_data[1], format='%d.%m.%Y %H:%M:%S')
-        min_date = raw_data[1].min()
-        max_date = raw_data[1].max()
+# if uploaded_files:
+#     for file in uploaded_files:
+#         file.seek(0)
+try:
+    uploaded_data_read = [pd.read_excel(file, header=None) for file in uploaded_files]
+    raw_data = pd.concat(uploaded_data_read)
+    raw_data = raw_data[raw_data[0]=="Date"]
+    raw_data[1] = pd.to_datetime(raw_data[1], format='%d.%m.%Y %H:%M:%S')
+    min_date = raw_data[1].min()
+    max_date = raw_data[1].max()
 
-    #         # %%
-    #     start_date = datetime.datetime.combine(date1,t1)
-    #     # end_date = datetime.datetime.combine(date2,t2)
-    #     end_date = '2025-08-08 12:00:00'
+#         # %%
+#     start_date = datetime.datetime.combine(date1,t1)
+#     # end_date = datetime.datetime.combine(date2,t2)
+#     end_date = '2025-08-08 12:00:00'
 
-    #     df = preprocess(uploaded_files=uploaded_files, start_date=start_date, end_date=end_date)
-    #     st.dataframe(df)
-    #     csv = convert_df(df)
+#     df = preprocess(uploaded_files=uploaded_files, start_date=start_date, end_date=end_date)
+#     st.dataframe(df)
+#     csv = convert_df(df)
 
-    #     st.download_button(
-    #     "Press to Download",
-    #     csv,
-    #     output_name + ".csv",
-    #     "text/csv",
-    #     key='download-csv'
-    #     )
+#     st.download_button(
+#     "Press to Download",
+#     csv,
+#     output_name + ".csv",
+#     "text/csv",
+#     key='download-csv'
+#     )
 
-        st.dataframe(raw_data)
-      
-    except:
-        pass
+    st.dataframe(raw_data)
+    
+except:
+    pass
 
 
 
