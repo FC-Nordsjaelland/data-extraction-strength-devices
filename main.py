@@ -115,10 +115,11 @@ with st.form(key='my_form'):
 
 uploaded_files = st.file_uploader("Upload xlsx files below", type="xlsx", accept_multiple_files=True)
 
-if len(uploaded_files) > 3:
+if uploaded_files is not None:
     st.write("Checkpoint1")
     uploaded_data_read = []
     for file in uploaded_files:
+        st.write(file.name)
         try:
             st.write("Checkpoint1a")
             x = pd.read_excel(file, header=None)
