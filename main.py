@@ -144,6 +144,8 @@ if uploaded_files is not None:
         max_date = raw_data[1].max()
     except:
         pass
+else:
+    pass
 
 
 
