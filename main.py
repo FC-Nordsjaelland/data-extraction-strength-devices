@@ -119,32 +119,36 @@ if uploaded_files is not None:
     st.write("Checkpoint1")
     uploaded_data_read = []
     for file in uploaded_files:
-        file.seek(0)
-        try:
-            st.write("Checkpoint1a")
-            x = pd.read_excel(file.name, header=None)
-            st.write(file.name, " read")
-            uploaded_data_read.append(x)
-            st.write("Checkpoint1c")
-            st.write(uploaded_data_read)
-        except:
-            pass
+        bytes_data = file.read()
+
+        st.write("File uploaded", file.name)
+        st.write(bytes_data)
+        # file.seek(0)
+        # try:
+        #     st.write("Checkpoint1a")
+        #     x = pd.read_excel(file.name, header=None)
+        #     st.write(file.name, " read")
+        #     uploaded_data_read.append(x)
+        #     st.write("Checkpoint1c")
+        #     st.write(uploaded_data_read)
+        # except:
+        #     pass
 
         
-    try:
-        st.write("Checkpoint2")
-        uploaded_data_read = [pd.read_excel(file, header=None) for file in uploaded_files]
-        st.write("Checkpoint3")
-        raw_data = pd.concat(uploaded_data_read)
-        st.write("Checkpoint4")
-        raw_data = raw_data[raw_data[0]=="Date"]
-        raw_data[1] = pd.to_datetime(raw_data[1], format='%d.%m.%Y %H:%M:%S')
-        min_date = raw_data[1].min()
-        max_date = raw_data[1].max()
-    except:
-        pass
+    # try:
+    #     st.write("Checkpoint2")
+    #     uploaded_data_read = [pd.read_excel(file, header=None) for file in uploaded_files]
+    #     st.write("Checkpoint3")
+    #     raw_data = pd.concat(uploaded_data_read)
+    #     st.write("Checkpoint4")
+    #     raw_data = raw_data[raw_data[0]=="Date"]
+    #     raw_data[1] = pd.to_datetime(raw_data[1], format='%d.%m.%Y %H:%M:%S')
+    #     min_date = raw_data[1].min()
+    #     max_date = raw_data[1].max()
+    # except:
+    #     pass
 else:
-    pass
+    st.warning("Upload the excel files")
 
 
 
