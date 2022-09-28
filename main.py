@@ -125,7 +125,7 @@ with st.form("my-form", clear_on_submit=True):
                 file.seek(0)
                 st.write("Checkpoint1a")
                 st.write(file.name)
-                x = pd.read_excel(file.name, header=None, engine='openpyxl')
+                x = pd.read_excel(file, header=None, engine='openpyxl')
                 st.dataframe(x)
                 uploaded_data_read.append(x)
                 st.write("Checkpoint1c")
