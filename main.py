@@ -116,6 +116,7 @@ with st.form(key='my_form'):
 uploaded_files = st.file_uploader("Upload xlsx files below", type="xlsx", accept_multiple_files=True)
 
 if len(uploaded_files) > 3:
+    st.write("Checkpoint1")
     for file in uploaded_files:
         file.seek(0)
     try:
