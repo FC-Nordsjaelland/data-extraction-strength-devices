@@ -119,8 +119,15 @@ if len(uploaded_files) > 3:
     st.write("Checkpoint1")
     uploaded_data_read = []
     for file in uploaded_files:
-        x = pd.read_excel(file, header=None)
-        uploaded_data_read.append(x)
+        try:
+            st.write("Checkpoint1a")
+            x = pd.read_excel(file, header=None)
+            st.write("Checkpoint1b")
+            uploaded_data_read.append(x)
+            st.write("Checkpoint1c")
+        except:
+            pass
+
         # file.seek(0)
     st.write("success")
     st.write(uploaded_data_read)
