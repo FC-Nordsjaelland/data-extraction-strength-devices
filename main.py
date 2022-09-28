@@ -94,28 +94,28 @@ max_date = datetime.datetime.strptime(max_date, '%Y-%m-%d')
 
 uploaded_files = st.file_uploader("Upload xlsx files below", type="xlsx", accept_multiple_files=True)
 
-with st.form(key='my_form'):
+# with st.form(key='my_form'):
 
-            c1, c2 = st.columns(2)
-            # with c1:
-            #     date1 = st.date_input(
-            #         "Choose a start date",
-            #         min_date.date())
-            #     t1 = st.time_input('Choose a start time', datetime.time(0, 00))
-            # with c2: 
-            #     date2 = st.date_input(
-            #         "Choose an end date",
-            #         max_date.date())
-            #     t2 = st.time_input('Choose an end time', datetime.time(23, 45))
+#             c1, c2 = st.columns(2)
+#             # with c1:
+#             #     date1 = st.date_input(
+#             #         "Choose a start date",
+#             #         min_date.date())
+#             #     t1 = st.time_input('Choose a start time', datetime.time(0, 00))
+#             # with c2: 
+#             #     date2 = st.date_input(
+#             #         "Choose an end date",
+#             #         max_date.date())
+#             #     t2 = st.time_input('Choose an end time', datetime.time(23, 45))
 
-            date1 = st.date_input(
-                    "Choose a testing date",
-                    min_date.date())
-            t1 = st.time_input("Choose the time of the testing", datetime.time(12,30))
-            t_interval = st.slider("Select the time interval [min]", 1, 720, 30)
+#             date1 = st.date_input(
+#                     "Choose a testing date",
+#                     min_date.date())
+#             t1 = st.time_input("Choose the time of the testing", datetime.time(12,30))
+#             t_interval = st.slider("Select the time interval [min]", 1, 720, 30)
 
-            output_name = st.text_input("Enter the output file name", "output")
-            st.form_submit_button()
+#             output_name = st.text_input("Enter the output file name", "output")
+#             st.form_submit_button()
 
 
 if uploaded_files:
@@ -146,11 +146,12 @@ if uploaded_files:
     #     key='download-csv'
     #     )
 
-
         st.dataframe(raw_data)
+      
     except:
         pass
 
+st.dataframe(raw_data)
 
 
 
