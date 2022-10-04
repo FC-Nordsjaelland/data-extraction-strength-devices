@@ -47,7 +47,7 @@ def preprocess(uploaded_files, start_date, end_date):
 
     players_data = []
     # for file in uploaded_files:
-    one_player = flatten_xlsx(file)
+    one_player = flatten_xlsx(uploaded_files)
     players_data.append(one_player)
         #line to add another column or so 
 
