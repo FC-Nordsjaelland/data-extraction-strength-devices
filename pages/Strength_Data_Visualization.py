@@ -11,7 +11,7 @@ st.sidebar.markdown("## Strength data visualization")
 uploaded_file = st.file_uploader("Choose a file to upload")
 if uploaded_file is not None:
     df1=pd.read_csv(uploaded_file)
-    st.dataframe(df1)
+    # st.dataframe(df1)
 
 
 def return_max(lst):
