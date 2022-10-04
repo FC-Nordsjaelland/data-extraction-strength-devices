@@ -104,6 +104,8 @@ def output_calculations(path, perc_margin=1, splits = 10, viz=False, zoom=False,
         ax2.axvline(x=onset_right, color='green', linestyle='--', lw=1)
         ax2.axvline(x=offset_right, color='green', linestyle='--', lw=1)
 
+        st.pyplot(fig)
+
         if zoom==True:
             ax1.set_xlim(onset_left-150, offset_left+150)
             ax2.set_xlim(onset_right-150, offset_right+150)
