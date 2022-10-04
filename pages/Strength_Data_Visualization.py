@@ -121,6 +121,12 @@ def output_calculations(path, perc_margin=1, splits = 10, viz=False, zoom=False,
 
 
 uploaded_file = st.file_uploader("Choose a file to upload")
-if uploaded_file is not None:
-    output_calculations(uploaded_file, viz=True, output=True)
 
+with st.form(key='my_form'):
+
+    perc_margin = st.slider("Select percent margin", 1, 50, 1)
+    splits = st.slider("Select the number of splits", 1, 100, 1)
+    st.form_submit_button()
+
+if uploaded_file is not None:
+    output_calculations(uploaded_file, perc_margin, splits, viz=True, output=False)
