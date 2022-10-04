@@ -46,9 +46,9 @@ def preprocess(uploaded_files, start_date, end_date):
     # file_names = glob.glob(os.path.join(dir_path, "*.xlsx"))
 
     players_data = []
-    for file in uploaded_files:
-        one_player = flatten_xlsx(file)
-        players_data.append(one_player)
+    # for file in uploaded_files:
+    one_player = flatten_xlsx(file)
+    players_data.append(one_player)
         #line to add another column or so 
 
     
