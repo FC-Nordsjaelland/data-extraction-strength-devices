@@ -6,4 +6,8 @@ openpyxl==3.0.10
 streamlit-aggrid==0.3.3
 seaborn==0.12.0
 pathlib==1.0.1
+<<<<<<< HEAD
 matplotlib==3.6.0
+=======
+matplotlib==3.6.0
+>>>>>>> 254c3d074b690c0f5a688e300b9d078b8ce170d5
