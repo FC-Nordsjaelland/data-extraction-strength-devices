@@ -1,119 +1,190 @@
+#%%
 import pandas as pd
-import matplotlib.pyplot as plt
-import seaborn as sns
-import numpy as np 
-from pathlib import Path
+import datetime
+from datetime import time
+import streamlit as st
+# from st_aggrid import AgGrid
+# warnings.filterwarnings("ignore")
+
+#%%
+
+st.set_page_config(page_title="Strength data visualization", layout ='wide')
+st.sidebar.markdown("## Strength data visualization")
+
+st.title("Strength data summary")
+st.text("")
+# st.header("**Instruction**")
 
 
-def return_max(lst):
+def flatten_xlsx(path):
 
-    max_value = 0
-    for num in lst:
-        if (max_value is None or float(num) > float(max_value)):
-            max_value = num
-    return float(max_value)
+    data = pd.read_excel(path, header=None)
 
+    metadata=data.head(6)
+    tests=data[7::]
+    metadata[[0,1]] = metadata[[0,1]].astype("string")
+    tests[[1,2]] = tests[[1,2]].astype("float")
 
-def output_calculations(path, perc_margin=1, splits = 10, viz=False, zoom=False, output=False): 
+    date = metadata[metadata[0]=='Date'][1][0]
+    device = metadata[metadata[0]=='Device'][1][1]
+    team = metadata[metadata[0]=='Team'][1][2]
+
+    name = metadata[metadata[0]=='Name'][1][3]
+    name = name.replace(" - nordic", "") #remove those occurences from the names
+    name = name.replace("1","") #sometimes it states " - nordic1", that line removes the issue
+
+    comment = metadata[metadata[0]=='Comment'][1][4]
+    left_max = tests[1].max()
+    right_max = tests[2].max()
+
+    x = [date,device,team,name,comment,left_max,right_max]
+
+    return x
+
+def preprocess(uploaded_files, start_date, end_date):
+
+    # file_names = glob.glob(os.path.join(dir_path, "*.xlsx"))
+
+    players_data = []
+    for file in uploaded_files:
+        one_player = flatten_xlsx(file)
+        players_data.append(one_player)
+        #line to add another column or so 
+
     
-    """
-    args:
-    path = file path where the csv file for extraction is located 
-    perc_margin = +/- value for +/- 2.5%, fx. for perc_margin = 1, the threshold will be set from 2.4% to 2.6%
-                - increase the margin if the onset/offset are further away from the curve of interest than they should be
-    splits = intervals/milisecond splits, used for the output file, fx. splits=10 means that we will take only every 10th milisecond into consideration
-    viz = set to True for visualization of the peaks, along with the onset/offset line (x axis = time[ms], y_axis = force_left/force_right[N])
-    zoom = set to True to view the zoomed part of the graphs in order to assess the peak and onset/offset calculations
-    output = set to True to save the files (will be saved in the same directory as the input file)
-    """ 
+    df = pd.DataFrame(players_data, columns=['Date','Device','Team','Name','Comment',"Max left", "Max right"])
+    df['Date'] = pd.to_datetime(df['Date'], format='%d.%m.%Y %H:%M:%S')
+    df[["Max left","Max right"]] = df[["Max left","Max right"]].astype(float)
+    # df = df.loc[(df['Date'] >= start_date) & (df['Date'] <= end_date)]
 
-    df = pd.read_csv(path, delimiter=';', skiprows=5)
-    if len(df.columns) == 4:
-         df.drop(df.columns[3], inplace=True, axis=1)
-    # df = df.rename(columns={"Time: 08.07.2022 13:57:23":"SampleTime[s]", "Unnamed: 1": "Force_left[N]", "Unnamed: 2":"Force_right[N]"})
-    dct_replace = {df.columns[0]:"SampleTime[s]", df.columns[1]:"Force_left[N]", df.columns[2]: "Force_right[N]"}
-    df = df.rename(columns=dct_replace)
-    df['Force_left[N]'] = df['Force_left[N]'].astype(float)
-    df['Force_right[N]'] = df['Force_right[N]'].astype(float)
-    df.reset_index(inplace = True)
-    df.drop("index", inplace=True, axis=1)
-
-    left = list(df['Force_left[N]'])
-    right = list(df['Force_right[N]'])
-    max_left = return_max(left)
-    max_right = return_max(right)
-    index_max_left = df[df['Force_left[N]'] == float(max_left)].index[0]
-    index_max_right = df[df['Force_right[N]'] == float(max_right)].index[0]
-
-    perc = 2.5
-    p = perc * 0.01
-    perc_margin = perc_margin * 0.001
-    p_lower = round(p-perc_margin,3)
-    p_upper = round(p+perc_margin,3)
-
-    left_24 = p_lower * float(max_left)
-    left_26 = p_upper * float(max_left)
-    left_24 = float("{:.2f}".format(left_24))
-    left_26 = float("{:.2f}".format(left_26))
-
-    right_24 = p_lower * float(max_right)
-    right_26 = p_upper * float(max_right)
-    right_24 = float("{:.2f}".format(right_24))
-    right_26 = float("{:.2f}".format(right_26))
-
-    acceptable_onset_value_lst_left = list(np.arange(left_24, left_26, 0.01))
-    acceptable_onset_value_lst_left = [float('%.2f' % elem) for elem in acceptable_onset_value_lst_left]
-
-    acceptable_onset_value_lst_right = list(np.arange(right_24, right_26, 0.01))
-    acceptable_onset_value_lst_right = [float('%.2f' % elem) for elem in acceptable_onset_value_lst_right]
-
-    possible_onsets_left = df[df['Force_left[N]'].isin(acceptable_onset_value_lst_left)]
-    possible_onsets_right = df[df['Force_right[N]'].isin(acceptable_onset_value_lst_right)]
-
-    onset_left = max([x for x in list(possible_onsets_left.index) if x <= index_max_left])
-    offset_left = min([x for x in list(possible_onsets_left.index) if x >= index_max_left])
-
-    onset_right = max([x for x in list(possible_onsets_right.index) if x <= index_max_right])
-    offset_right = min([x for x in list(possible_onsets_right.index) if x >= index_max_right])
-
-    df_left = df[['SampleTime[s]', 'Force_left[N]']]
-    df_left = df_left.iloc[onset_left:offset_left]
-
-    df_right = df[['SampleTime[s]', 'Force_right[N]']]
-    df_right = df_right.iloc[onset_right:offset_right]
-
-    df_left = df_left.iloc[::splits, :]
-    df_right = df_right.iloc[::splits, :]
-
-    df_left["Peak"] = max_left
-    df_right["Peak"] = max_right
-    df_left['Peak_difference[Peak-Force_left]'] = max_left - df_left['Force_left[N]']
-    df_right['Peak_difference[Peak-Force_right]'] = max_right - df_right['Force_right[N]']
-
-    if viz == True:
-
-        fig, (ax1, ax2) = plt.subplots(2,1)
-        sns.lineplot(data=df, x=df.index, y='Force_left[N]', ax=ax1)
-        ax1.axvline(x=onset_left, color='green', linestyle='--', lw=1)
-        ax1.axvline(x=offset_left, color='green', linestyle='--', lw=1)
-
-        sns.lineplot(data=df, x=df.index, y='Force_right[N]', ax=ax2)
-        ax2.axvline(x=onset_right, color='green', linestyle='--', lw=1)
-        ax2.axvline(x=offset_right, color='green', linestyle='--', lw=1)
-
-        if zoom==True:
-            ax1.set_xlim(onset_left-150, offset_left+150)
-            ax2.set_xlim(onset_right-150, offset_right+150)
-
-    if output == True:
-
-        directory_path = str(Path(path).parent)
-        df_left.to_excel(directory_path + "/output_left.xlsx")
-        df_right.to_excel(directory_path + "/output_right.xlsx")
+    df['time_difference'] = (df['Date']-start_date).astype('timedelta64[m]')
+    df['time_difference'] = df['time_difference'].astype(int)
+    within_interval_df = df[(df['time_difference'] >= -t_interval) & (df['time_difference'] <= t_interval)]
+    within_interval_df_meta = within_interval_df.copy()
+    within_interval_df = within_interval_df.groupby(['Name', 'Device'])[["Max left", "Max right"]].max()
+    
+    within_interval_df_meta = within_interval_df_meta.drop(['Max left', 'Max right'], axis = 1)
+    merge_within_interval = pd.merge(within_interval_df, within_interval_df_meta, on=["Name","Device"])
 
 
-    return df_left, df_right
+    not_in_interval = df[~((df['time_difference'] >= -t_interval) & (df['time_difference'] <= t_interval))]
+
+    final_df = pd.concat([merge_within_interval, not_in_interval])
+
+    final_df = final_df.drop_duplicates(subset=['Name', 'Device', "Max left", "Max right"])
+    final_df = final_df.sort_values(by=['Name'])
+    final_df['Max left'] = final_df['Max left'].round(decimals=1)
+    final_df['Max right'] = final_df['Max right'].round(decimals=1)
+    final_df = final_df.drop(["time_difference"], axis=1)
+    final_df = final_df.reset_index(drop=True)
+    final_df = final_df[['Name', 'Device', 'Team', 'Date','Max left', 'Max right', 'Comment']]
+   
+    return final_df
+
+def convert_df(df):
+    return df.to_csv(index=False).encode('utf-8')
+
+min_date = "2022-01-01"
+min_date = datetime.datetime.strptime(min_date, '%Y-%m-%d')
+max_date = "2023-01-01"
+max_date = datetime.datetime.strptime(max_date, '%Y-%m-%d')
 
 
-# path = " "
-# output_calculations(path, viz=True, output=True)
+    
+uploaded_files = st.file_uploader("Upload xlsx files below", type="xlsx", accept_multiple_files=True)
+    
+if uploaded_files is not None:
+    uploaded_data_read = []
+    
+    try:
+        for file in uploaded_files:
+            uploaded_data_read = [pd.read_excel(file, header=None) for file in uploaded_files]
+            raw_data = pd.concat(uploaded_data_read)
+            raw_data = raw_data[raw_data[0]=="Date"]
+            raw_data[1] = pd.to_datetime(raw_data[1], format='%d.%m.%Y %H:%M:%S')
+            min_date = raw_data[1].min()
+            max_date = raw_data[1].max()
+    except:
+        pass
+
+
+
+with st.form(key='my_form'):
+
+    c1, c2 = st.columns(2)
+    # with c1:
+    #     date1 = st.date_input(
+    #         "Choose a start date",
+    #         min_date.date())
+    #     t1 = st.time_input('Choose a start time', datetime.time(0, 00))
+    # with c2: 
+    #     date2 = st.date_input(
+    #         "Choose an end date",
+    #         max_date.date())
+    #     t2 = st.time_input('Choose an end time', datetime.time(23, 45))
+
+    date1 = st.date_input(
+            "Choose a testing date",
+            min_date.date())
+    t1 = st.time_input("Choose the time of the testing", datetime.time(12,30))
+    t_interval = st.slider("Select the time interval [min]", 1, 720, 30)
+
+    output_name = st.text_input("Enter the output file name", "testing")
+    st.form_submit_button()
+
+
+
+
+            
+        # try:
+        #     st.write("Checkpoint2")
+        #     uploaded_data_read = [pd.read_excel(file, header=None) for file in uploaded_files]
+        #     st.write("Checkpoint3")
+        #     raw_data = pd.concat(uploaded_data_read)
+        #     st.write("Checkpoint4")
+        #     raw_data = raw_data[raw_data[0]=="Date"]
+        #     raw_data[1] = pd.to_datetime(raw_data[1], format='%d.%m.%Y %H:%M:%S')
+        #     min_date = raw_data[1].min()
+        #     max_date = raw_data[1].max()
+        # except:
+        #     pass
+
+
+
+
+
+
+
+# path = input("Enter the directory path where the Excel files are stored: ")
+# path2 = input("Enter the directory path where the CSV output is saved: ")
+# date1 = input("Enter the starting date and time (format - 2022-03-04 12:00:00): ")
+# date2 = input("Enter the end date (format - 2022-03-04 12:00:00): ")
+# name = input("Enter the output file name: ")
+
+#start_datetime = datetime.strptime('2022-03-04 12:00:00', '%Y-%m-%d %H:%M:%S')
+
+# start_date = date1 + t1
+# end_date = date2 + t2
+
+# start_datetime = datetime.strptime(start_date, '%Y-%m-%d %H:%M:%S')
+# end_datetime = datetime.strptime(end_date, '%Y-%m-%d %H:%M:%S')
+
+# %%
+start_date = datetime.datetime.combine(date1,t1)
+# end_date = datetime.datetime.combine(date2,t2)
+end_date = '2025-08-08 12:00:00'
+
+df = preprocess(uploaded_files=uploaded_files, start_date=start_date, end_date=end_date)
+# AgGrid(df, fit_columns_on_grid_load=True)
+st.dataframe(df)
+csv = convert_df(df)
+
+st.download_button(
+"Press to Download",
+csv,
+output_name + ".csv",
+"text/csv",
+key='download-csv'
+)
+
+
