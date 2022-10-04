@@ -1,4 +1,5 @@
 #%%
+from pickle import FALSE
 import pandas as pd
 import datetime
 from datetime import time
@@ -90,7 +91,7 @@ max_date = datetime.datetime.strptime(max_date, '%Y-%m-%d')
 
 
     
-uploaded_files = st.file_uploader("Upload xlsx files below", type="xlsx", accept_multiple_files=True)
+uploaded_files = st.file_uploader("Upload xlsx files below", type="xlsx", accept_multiple_files=False)
     
 if uploaded_files is not None:
     uploaded_data_read = []
