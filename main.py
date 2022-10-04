@@ -8,7 +8,10 @@ import streamlit as st
 
 #%%
 
-st.set_page_config(page_title="Polar data extraction", layout ='centered')
+st.set_page_config(page_title="Strength data visualization", layout ='centered')
+
+st.set_page_config(page_title="Strength data visualization", page_icon="☀️", layout="wide")
+st.sidebar.markdown("## Strength data visualization")
 
 st.title("Strength data summary")
 st.text("")
