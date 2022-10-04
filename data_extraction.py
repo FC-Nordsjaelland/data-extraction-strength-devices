@@ -92,6 +92,22 @@ max_date = datetime.datetime.strptime(max_date, '%Y-%m-%d')
 
     
 uploaded_files = st.file_uploader("Upload xlsx files below", type="xlsx", accept_multiple_files=True)
+    
+if uploaded_files is not None:
+    uploaded_data_read = []
+    
+    try:
+        for file in uploaded_files:
+            uploaded_data_read = [pd.read_excel(file, header=None) for file in uploaded_files]
+            raw_data = pd.concat(uploaded_data_read)
+            raw_data = raw_data[raw_data[0]=="Date"]
+            raw_data[1] = pd.to_datetime(raw_data[1], format='%d.%m.%Y %H:%M:%S')
+            min_date = raw_data[1].min()
+            max_date = raw_data[1].max()
+    except:
+        pass
+
+
 
 with st.form(key='my_form'):
 
@@ -115,41 +131,6 @@ with st.form(key='my_form'):
 
     output_name = st.text_input("Enter the output file name", "testing")
     st.form_submit_button()
-
-    
-if uploaded_files is not None:
-    uploaded_data_read = []
-    
-    try:
-        for file in uploaded_files:
-            uploaded_data_read = [pd.read_excel(file, header=None) for file in uploaded_files]
-            raw_data = pd.concat(uploaded_data_read)
-            raw_data = raw_data[raw_data[0]=="Date"]
-            raw_data[1] = pd.to_datetime(raw_data[1], format='%d.%m.%Y %H:%M:%S')
-            min_date = raw_data[1].min()
-            max_date = raw_data[1].max()
-
-            # %%
-            start_date = datetime.datetime.combine(date1,t1)
-            # end_date = datetime.datetime.combine(date2,t2)
-            end_date = '2025-08-08 12:00:00'
-
-            df = preprocess(uploaded_files=uploaded_files, start_date=start_date, end_date=end_date)
-            # AgGrid(df, fit_columns_on_grid_load=True)
-            st.dataframe(df)
-            csv = convert_df(df)
-
-            st.download_button(
-            "Press to Download",
-            csv,
-            output_name + ".csv",
-            "text/csv",
-            key='download-csv'
-            )
-
-    except:
-        pass
-
 
 
 
@@ -188,5 +169,22 @@ if uploaded_files is not None:
 # start_datetime = datetime.strptime(start_date, '%Y-%m-%d %H:%M:%S')
 # end_datetime = datetime.strptime(end_date, '%Y-%m-%d %H:%M:%S')
 
+# %%
+start_date = datetime.datetime.combine(date1,t1)
+# end_date = datetime.datetime.combine(date2,t2)
+end_date = '2025-08-08 12:00:00'
+
+df = preprocess(uploaded_files=uploaded_files, start_date=start_date, end_date=end_date)
+# AgGrid(df, fit_columns_on_grid_load=True)
+st.dataframe(df)
+csv = convert_df(df)
+
+st.download_button(
+"Press to Download",
+csv,
+output_name + ".csv",
+"text/csv",
+key='download-csv'
+)
 
 
