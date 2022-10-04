@@ -108,11 +108,11 @@ def output_calculations(path, perc_margin=1, splits = 10, viz=False, zoom=False,
             ax1.set_xlim(onset_left-150, offset_left+150)
             ax2.set_xlim(onset_right-150, offset_right+150)
 
-    if output == True:
+    # if output == True:
 
-        directory_path = str(Path(path).parent)
-        df_left.to_excel(directory_path + "/output_left.xlsx")
-        df_right.to_excel(directory_path + "/output_right.xlsx")
+    #     directory_path = str(Path(path).parent)
+    #     df_left.to_excel(directory_path + "/output_left.xlsx")
+    #     df_right.to_excel(directory_path + "/output_right.xlsx")
 
 
     return df_left, df_right
