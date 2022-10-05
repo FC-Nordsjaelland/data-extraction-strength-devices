@@ -6,6 +6,8 @@ import numpy as np
 from pathlib import Path
 from zipfile import ZipFile
 from io import BytesIO
+import base64
+
 
 st.set_page_config(page_title="Strength data visualization", page_icon="☀️", layout="wide")
 st.sidebar.markdown("## Strength data visualization")
@@ -144,10 +146,13 @@ if uploaded_file is not None:
 
     ZipfileDotZip = "sample.zip"
 
-    btn = st.download_button(
-        label="Download ZIP",
-        file_name="sample.zip",
-    )
+    with open(ZipfileDotZip, "rb") as f:
+        bytes = f.read()
+        b64 = base64.b64encode(bytes).decode()
+        href = f"<a href=\"data:file/zip;base64,{b64}\" download='{ZipfileDotZip}.zip'>\
+            Click last model weights\
+        </a>"
+    st.sidebar.markdown(href, unsafe_allow_html=True)
 
 # st.download_button(
 # "Press to Download",
