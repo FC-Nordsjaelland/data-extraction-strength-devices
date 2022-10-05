@@ -200,8 +200,15 @@ output_name + ".csv",
 key='download-csv'
 )
 
+
+with st.form(key='my_form2'):
+    test = st.radio("Choose a test to visualize", ("NORDIC", "GROIN"))
+    st.form_submit_button(label='Visualize')
+
+
+
 try:
-    test = st.radio("Choose a test", ("NORDIC", "GROIN"))
+    
     if test == 'NORDIC':
         filter_col = [col for col in df if col.startswith("NORDIC")]
         df1 = df[filter_col]
