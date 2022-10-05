@@ -216,7 +216,7 @@ elif test == 'GROIN':
 
 try:
     df.plot(x='Name', y=['Max left', 'Max right'], kind='bar')
-    plt.xticks(rotation=45)
+    plt.xticks(rotation=70)
     st.pyplot(fig=plt)
 except:
     pass
