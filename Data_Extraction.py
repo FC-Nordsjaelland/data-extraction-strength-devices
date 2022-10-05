@@ -209,15 +209,15 @@ with st.form(key='my_form2'):
 
 try:
     
-    if test == 'NORDIC':
-        filter_col = [col for col in df if col.startswith("NORDIC")]
-        df1 = df[filter_col]
+    # if test == 'NORDIC':
+    #     filter_col = [col for col in df if col.startswith("NORDIC")]
+    #     df1 = df[filter_col]
 
-    elif test == 'GROIN':
-        filter_col = [col for col in df if col.startswith("GROIN")]
-        df1 = df[filter_col]
+    # elif test == 'GROIN':
+    #     filter_col = [col for col in df if col.startswith("GROIN")]
+    #     df1 = df[filter_col]
 
-    df1.plot(x='Name', y=[['Max left', 'Max right']], kind='bar')
+    df.plot(x='Name', y=[['Max left', 'Max right']], kind='bar')
     plt.xtiks(rotation=45)
     st.pyplot(fig=plt)
 except:
