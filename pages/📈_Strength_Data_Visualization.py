@@ -132,7 +132,7 @@ uploaded_file = st.file_uploader("Choose a file to upload")
 with st.form(key='my_form'):
 
     perc_margin = st.slider("Select percent margin", 0.1, 10.0, 0.1)
-    splits = st.slider("Select the number of splits", 1, 100, 1)
+    splits = st.slider("Select the number of splits", 1, 100, 10)
     zoom = st.radio("Zoom in the graph", ("No","Yes"))
 
     st.form_submit_button()
