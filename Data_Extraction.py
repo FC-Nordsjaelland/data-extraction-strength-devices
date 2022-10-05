@@ -1,10 +1,10 @@
 #%%
 import pandas as pd
+import matplotlib.pyplot as plt
 import datetime
 from datetime import time
 import streamlit as st
 from st_aggrid import AgGrid
-import matplotlib.pyplot as plt
 # warnings.filterwarnings("ignore")
 
 #%%
@@ -201,8 +201,7 @@ key='download-csv'
 )
 
 fig, ax = plt.subplots()
-
-df.plot(x=df['Name'], y=df[['Max left', 'Max right']], kind='bar')
+df.plot(x='Name', y=['Max left', 'Max right'], kind='bar')
 st.pyplot(fig)
 
 
