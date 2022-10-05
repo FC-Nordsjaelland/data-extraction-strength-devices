@@ -217,7 +217,7 @@ elif test == 'GROIN':
 try:
 
     df.plot(x='Name', y=['Max left', 'Max right'], kind='bar')
-    plt.xticks(rotation=90)
+    plt.xticks(rotation=75)
     plt.xlabel("")
     plt.ylabel("Strength (Newtons)")
     
@@ -227,7 +227,7 @@ try:
     elif test == 'GROIN':
         plt.title("Adductor Strength")
 
-    plt.legend(fontsize=5)
+    plt.legend(fontsize=9)
 
     st.pyplot(fig=plt)
 except:
