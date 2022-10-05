@@ -22,7 +22,7 @@ st.title("Strength data summary")
 st.header("**Instruction**")
 st.markdown("1) Upload the excel files to preprocess")
 st.markdown("2) Choose a testing date (by default set to the earliest one found in the excel files)")
-st.markdown("3) Choose the time of testing and the interval of acceptance -> multiple files for one player will be aggregated within the specified time interval")
+st.markdown("3) Choose the time of testing and the interval of acceptance - <u>multiple files for one player will be aggregated within the specified time interval</u>")
 st.markdown("4) Select the output name of the downloaded file (default: output.csv)")  
 st.markdown("")
 
