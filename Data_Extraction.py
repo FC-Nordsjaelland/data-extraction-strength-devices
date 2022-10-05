@@ -28,6 +28,8 @@ st.markdown("3) Choose the time of testing and the interval of acceptance - **mu
 st.markdown("4) Select the output name of the downloaded file (default: output.csv)")  
 st.markdown("")
 
+def percentage_difference(col1, col2):
+    return (abs(col1 - col2)/((col1 + col2)/2) * 100)
 
 def flatten_xlsx(path):
 
@@ -90,8 +92,8 @@ def preprocess(uploaded_files, start_date, end_date):
     final_df['Max right'] = final_df['Max right'].round(decimals=1)
     final_df = final_df.drop(["time_difference"], axis=1)
     final_df = final_df.reset_index(drop=True)
-    final_df = final_df[['Name', 'Device', 'Team', 'Date','Max left', 'Max right', 'Comment']]
-   
+    final_df = final_df[['Date','Team','Name', 'Device','Max left', 'Max right', 'Comment']]
+    final_df['Percentage difference'] = percentage_difference(df['Max left'], df['Max right'])
     return final_df
 
 def convert_df(df):
