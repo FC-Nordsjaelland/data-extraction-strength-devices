@@ -110,10 +110,11 @@ def output_calculations(path, perc_margin=1, splits = 10, viz=False, zoom=False,
 
         st.pyplot(fig)
 
-        if zoom==True:
-            ax1.set_xlim(onset_left-150, offset_left+150)
-            ax2.set_xlim(onset_right-150, offset_right+150)
+        fig, (ax3, ax4) = plt.subplots(2,1)
+        ax3.set_xlim(onset_left-150, offset_left+150)
+        ax4.set_xlim(onset_right-150, offset_right+150)
 
+        st.pyplot(fig)
     # if output == True:
 
     #     directory_path = str(Path(path).parent)
@@ -130,6 +131,7 @@ with st.form(key='my_form'):
 
     perc_margin = st.slider("Select percent margin", 1, 50, 1)
     splits = st.slider("Select the number of splits", 1, 100, 1)
+
     st.form_submit_button()
 
 if uploaded_file is not None:
