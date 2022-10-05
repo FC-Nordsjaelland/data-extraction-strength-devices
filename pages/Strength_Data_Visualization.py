@@ -12,6 +12,10 @@ import base64
 st.set_page_config(page_title="Strength Data Visualization", page_icon="☀️", layout="wide")
 st.sidebar.markdown("## Strength Data Visualization")
 
+st.title("Strength Data Visualization")
+
+
+
 def return_max(lst):
 
     max_value = 0
@@ -108,19 +112,11 @@ def output_calculations(path, perc_margin=1, splits = 10, viz=False, zoom=False,
         ax2.axvline(x=onset_right, color='green', linestyle='--', lw=1)
         ax2.axvline(x=offset_right, color='green', linestyle='--', lw=1)
 
-        st.pyplot(fig)
+        if zoom==True:
+            ax1.set_xlim(onset_left-150, offset_left+150)
+            ax2.set_xlim(onset_right-150, offset_right+150)
 
-        fig, (ax3, ax4) = plt.subplots(2,1)
-        ax3.set_xlim(onset_left-150, offset_left+150)
-        ax4.set_xlim(onset_right-150, offset_right+150)
-
-        st.pyplot(fig)
-    # if output == True:
-
-    #     directory_path = str(Path(path).parent)
-    #     df_left.to_excel(directory_path + "/output_left.xlsx")
-    #     df_right.to_excel(directory_path + "/output_right.xlsx")
-
+    st.pyplot(fig)
 
     return df_left, df_right
 
@@ -131,11 +127,18 @@ with st.form(key='my_form'):
 
     perc_margin = st.slider("Select percent margin", 1, 50, 1)
     splits = st.slider("Select the number of splits", 1, 100, 1)
+    zoom = st.radio("Zoom in the graph", "Yes", "No")
 
     st.form_submit_button()
 
 if uploaded_file is not None:
-    df_left, df_right = output_calculations(uploaded_file, perc_margin, splits, viz=True, output=False)
+    if zoom == "Yes":
+        zoom = True
+    elif zoom == "No":
+        zoom = False
+
+    df_left, df_right = output_calculations(uploaded_file, perc_margin, splits, viz=True, output=False, zoom=zoom)
+
     zipObj = ZipFile("output.zip", "w")
     # Add multiple files to the zip
     df_left.to_excel("output_left.xlsx")
