@@ -92,6 +92,7 @@ def preprocess(uploaded_files, start_date, end_date):
     final_df['Max right'] = final_df['Max right'].round(decimals=1)
     final_df = final_df.drop(["time_difference"], axis=1)
     final_df = final_df.reset_index(drop=True)
+
     final_df['Percentage difference'] = df['Percentage difference'].apply(percentage_difference(df['Max left'], df['Max right']))
     final_df['Percentage difference'] = final_df['Percentage difference'].round(decimals=1)
     final_df = final_df[['Date','Team','Name', 'Device','Max left', 'Max right', 'Percentage difference', 'Comment']]
@@ -192,6 +193,7 @@ end_date = '2025-08-08 12:00:00'
 
 df = preprocess(uploaded_files=uploaded_files, start_date=start_date, end_date=end_date)
 AgGrid(df, fit_columns_on_grid_load=True)
+st.write(df.dtypes)
 # st.dataframe(df)
 csv = convert_df(df)
 
