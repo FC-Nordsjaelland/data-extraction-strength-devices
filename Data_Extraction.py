@@ -213,7 +213,9 @@ key='download-csv'
     # elif test == 'GROIN':
     #     filter_col = [col for col in df if col.startswith("GROIN")]
     #     df1 = df[filter_col]
-
-df.plot(x='Name', y=['Max left', 'Max right'], kind='bar')
-plt.xticks(rotation=45)
-st.pyplot(fig=plt)
+try:
+    df.plot(x='Name', y=['Max left', 'Max right'], kind='bar')
+    plt.xticks(rotation=45)
+    st.pyplot(fig=plt)
+except:
+    pass
