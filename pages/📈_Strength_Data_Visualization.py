@@ -12,6 +12,12 @@ import base64
 st.set_page_config(page_title="Strength Data Visualization", page_icon="☀️", layout="wide")
 st.sidebar.markdown("## Strength Data Visualization")
 
+st.sidebar.header("**Functionality**")
+st.sidebar.markdown("- Percent margin: +/- value for +/- 2.5%, fx. for Percent margin = 1, the threshold will be set from 2.4% to 2.6%")
+st.sidebar.markdown("- Increase the margin if the onset/offset are further away from the curve of interest than they should be")
+st.sidebar.markdown("- Number of splits: intervals/milisecond splits, used for the output file, fx. splits=10 means that we will take only every 10th millisecond into consideration")
+st.sidebar.markdown("- Zoom: Yes - view the zoomed part of the graphs to assess the peak and onset/offset calculations in more detail")
+
 st.title("Strength Data Visualization")
 
 
