@@ -8,8 +8,8 @@ from st_aggrid import AgGrid
 
 #%%
 
-st.set_page_config(page_title="Strength data visualization", layout ='wide')
-st.sidebar.markdown("## Strength data visualization")
+st.set_page_config(page_title="Strength data summary", layout ='wide')
+st.sidebar.markdown("## Strength data summary")
 
 st.title("Strength data summary")
 st.text("")
