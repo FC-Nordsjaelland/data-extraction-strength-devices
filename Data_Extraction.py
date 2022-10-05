@@ -11,11 +11,10 @@ from st_aggrid import AgGrid
 st.set_page_config(page_title="Strength data summary", layout ='wide')
 st.sidebar.markdown("## Strength data summary")
 st.sidebar.header("**Instruction**")
-st.sidebar.markdown("1) Right click, copy and open the [link]")
-st.sidebar.markdown("2) After a successful authentication, expand the link of the page and copy the code (fx. 'http://xyz/?code=u9xMkv')")
-st.sidebar.markdown("3) Paste the code into the first cell in the form below")
-st.sidebar.markdown("4) Choose your team, training/match date, session number (in case there's multiple sessions in a day, fx. 1 stands for the first session in a day")  
-st.sidebar.markdown("5) Input the session's name (fx. 'FCN U17 vs FCM U17' / default: 'Football Training')")
+st.sidebar.markdown("1) Upload the excel files to preprocess")
+st.sidebar.markdown("2) Choose a a testing date (by default set to the earliest one in the excel files)")
+st.sidebar.markdown("3) Choose the time of testing and the interval of acceptance -> multiple files for one player will be aggregated within the interval")
+st.sidebar.markdown("4) Select the output name of the downloaded file (default: output.csv")  
 
 st.title("Strength data summary")
 st.text("")
@@ -135,7 +134,7 @@ with st.form(key='my_form'):
     t1 = st.time_input("Choose the time of the testing", datetime.time(12,30))
     t_interval = st.slider("Select the time interval [min]", 1, 720, 30)
 
-    output_name = st.text_input("Enter the output file name", "testing")
+    output_name = st.text_input("Enter the output file name", "output")
     st.form_submit_button()
 
 
