@@ -218,7 +218,7 @@ try:
 
     df.plot(x='Name', y=['Max left', 'Max right'], kind='bar')
     plt.xticks(rotation=90)
-    plt.xlabel("Strength (Newtons)")
+    plt.ylabel("Strength (Newtons)")
     
     if test == 'NORDIC':
         plt.title("Hamstring Strength")
