@@ -13,7 +13,7 @@ st.set_page_config(page_title="Strength Data Visualization", page_icon="☀️",
 st.sidebar.markdown("## Strength Data Visualization")
 
 st.sidebar.header("**Functionality**")
-st.sidebar.markdown("- Percent margin: +/- value for +/- 2.5%, fx. for Percent margin = 1, the threshold will be set from 2.4% to 2.6%")
+st.sidebar.markdown("- Percent margin: +/- value for +/- 2.5%, fx. for Percent margin = 0.1, the threshold will be set from 2.4% to 2.6%")
 st.sidebar.markdown("- Increase the margin if the onset/offset are further away from the curve of interest than they should be")
 st.sidebar.markdown("- Number of splits: intervals/milisecond splits, used for the output file, fx. splits=10 means that we will take only every 10th millisecond into consideration")
 st.sidebar.markdown("- Zoom: Yes - view the zoomed part of the graphs to assess the peak and onset/offset calculations in more detail")
@@ -31,12 +31,12 @@ def return_max(lst):
     return float(max_value)
 
 
-def output_calculations(path, perc_margin=1, splits = 10, viz=False, zoom=False, output=False): 
+def output_calculations(path, perc_margin=0.1, splits = 10, viz=False, zoom=False, output=False): 
     
     """
     args:
     path = file path where the csv file for extraction is located 
-    perc_margin = +/- value for +/- 2.5%, fx. for perc_margin = 1, the threshold will be set from 2.4% to 2.6%
+    perc_margin = +/- value for +/- 2.5%, fx. for perc_margin = 0.1, the threshold will be set from 2.4% to 2.6%
                 - increase the margin if the onset/offset are further away from the curve of interest than they should be
     splits = intervals/milisecond splits, used for the output file, fx. splits=10 means that we will take only every 10th milisecond into consideration
     viz = set to True for visualization of the peaks, along with the onset/offset line (x axis = time[ms], y_axis = force_left/force_right[N])
@@ -64,7 +64,7 @@ def output_calculations(path, perc_margin=1, splits = 10, viz=False, zoom=False,
 
     perc = 2.5
     p = perc * 0.01
-    perc_margin = perc_margin * 0.001
+    perc_margin = perc_margin * 0.01
     p_lower = round(p-perc_margin,3)
     p_upper = round(p+perc_margin,3)
 
@@ -131,7 +131,7 @@ uploaded_file = st.file_uploader("Choose a file to upload")
 
 with st.form(key='my_form'):
 
-    perc_margin = st.slider("Select percent margin", 1, 50, 1)
+    perc_margin = st.slider("Select percent margin", 0.1, 2.5, 0.1)
     splits = st.slider("Select the number of splits", 1, 100, 1)
     zoom = st.radio("Zoom in the graph", ("No","Yes"))
 
