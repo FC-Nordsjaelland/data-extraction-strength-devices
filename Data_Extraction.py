@@ -215,5 +215,5 @@ key='download-csv'
     #     df1 = df[filter_col]
 
 df.plot(x='Name', y=['Max left', 'Max right'], kind='bar')
-plt.xtiks(rotation=45)
+plt.xticks(rotation=45)
 st.pyplot(fig=plt)
