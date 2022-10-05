@@ -212,7 +212,7 @@ if test == 'NORDIC':
     df = df[df['Device'].str.startswith("NORDIC")]
 
 elif test == 'GROIN':
-    df = df[df['Device'].str.startswith("NORDIC")]
+    df = df[df['Device'].str.startswith("GROIN")]
 
 try:
     df.plot(x='Name', y=['Max left', 'Max right'], kind='bar')
