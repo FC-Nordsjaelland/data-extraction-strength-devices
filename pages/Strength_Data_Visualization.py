@@ -144,13 +144,13 @@ if uploaded_file is not None:
     # close the Zip File
     zipObj.close()
 
-    ZipfileDotZip = "sample.zip"
+    ZipfileDotZip = "output.zip"
 
     with open(ZipfileDotZip, "rb") as fp: 
         btn = st.download_button(
             label="Download ZIP", 
             data=fp, 
-            file_name="sample.zip", 
+            file_name="output.zip", 
             mime="application/zip" )
 
 # st.download_button(
