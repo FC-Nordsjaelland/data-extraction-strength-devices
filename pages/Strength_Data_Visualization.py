@@ -4,6 +4,8 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import numpy as np 
 from pathlib import Path
+from zipfile import ZipFile
+from io import BytesIO
 
 st.set_page_config(page_title="Strength data visualization", page_icon="☀️", layout="wide")
 st.sidebar.markdown("## Strength data visualization")
@@ -129,4 +131,28 @@ with st.form(key='my_form'):
     st.form_submit_button()
 
 if uploaded_file is not None:
-    output_calculations(uploaded_file, perc_margin, splits, viz=True, output=False)
+    df_left, df_right = output_calculations(uploaded_file, perc_margin, splits, viz=True, output=False)
+    zipObj = ZipFile("output.zip", "w")
+    # Add multiple files to the zip
+    df_left.to_excel("output_left.xlsx")
+    df_right.to_excel("output_right.xlsx")
+
+    zipObj.write("output_left.xlsx")
+    zipObj.write("output_right.xlsx")
+    # close the Zip File
+    zipObj.close()
+
+    ZipfileDotZip = "sample.zip"
+
+    btn = st.download_button(
+        label="Download ZIP",
+        file_name="sample.zip",
+    )
+
+# st.download_button(
+# "Press to Download",
+# csv,
+# output_name + ".csv",
+# "text/csv",
+# key='download-csv'
+# )
