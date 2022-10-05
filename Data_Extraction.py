@@ -226,6 +226,7 @@ try:
     elif test == 'GROIN':
         plt.title("Adductor Strength")
 
+    plt.legend(fontsize=5)
 
     st.pyplot(fig=plt)
 except:
