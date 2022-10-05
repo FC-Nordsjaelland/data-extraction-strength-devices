@@ -9,6 +9,7 @@ from st_aggrid import AgGrid
 #%%
 
 st.set_page_config(page_title="Strength data summary", layout ='wide')
+st.sidebar.markdown("## Strength data summary")
 
 
 st.sidebar.header("**Functionality**")
@@ -18,7 +19,6 @@ st.sidebar.markdown("- After the user uploads the files, a table is shown below 
 st.sidebar.markdown("- The time interval functionality's goal is to get rid of the files produced by mistake during testing, within a specified time interval all the data for one specific player is aggregated.")
 
 
-st.sidebar.markdown("## Strength data summary")
 st.sidebar.header("**Instruction**")
 st.sidebar.markdown("1) Upload the excel files to preprocess")
 st.sidebar.markdown("2) Choose a testing date (by default set to the earliest one found in the excel files)")
