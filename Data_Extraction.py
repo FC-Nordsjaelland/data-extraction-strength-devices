@@ -9,11 +9,20 @@ from st_aggrid import AgGrid
 #%%
 
 st.set_page_config(page_title="Strength data summary", layout ='wide')
+
+
+st.sidebar.header("**Functionality**")
+st.sidebar.markdown("- The app accepts multiple excel files and produces one output that aggregates all the data into one file.")
+st.sidebar.markdown("- The aggregated data columns are as follows: (Name, Device, Team, Date, Max left, Max right, Comment)")
+st.sidebar.markdown("- After the user uploads the files, a table is shown below with the preview of the output, a user can then decide to modify the time interval in order to capture the entire testing session")
+st.sidebar.markdown("- The time interval functionality's goal is to get rid of the files produced by mistake during testing, within a specified time interval all the data for one specific player is aggregated.")
+
+
 st.sidebar.markdown("## Strength data summary")
 st.sidebar.header("**Instruction**")
 st.sidebar.markdown("1) Upload the excel files to preprocess")
-st.sidebar.markdown("2) Choose a a testing date (by default set to the earliest one in the excel files)")
-st.sidebar.markdown("3) Choose the time of testing and the interval of acceptance -> multiple files for one player will be aggregated within the interval")
+st.sidebar.markdown("2) Choose a testing date (by default set to the earliest one found in the excel files)")
+st.sidebar.markdown("3) Choose the time of testing and the interval of acceptance -> multiple files for one player will be aggregated within the specified time interval")
 st.sidebar.markdown("4) Select the output name of the downloaded file (default: output.csv")  
 
 st.title("Strength data summary")
