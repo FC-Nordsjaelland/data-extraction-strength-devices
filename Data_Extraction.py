@@ -199,4 +199,7 @@ output_name + ".csv",
 key='download-csv'
 )
 
+df.plot(x='Name', y=['Max left', 'Max right'], kind='bar')
+
+
 
