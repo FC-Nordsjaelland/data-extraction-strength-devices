@@ -216,8 +216,8 @@ elif test == 'GROIN':
 
 try:
 
-    df.plot(x='Name', y=['Max left', 'Max right'], kind='barh')
-    # plt.xticks(rotation=90)
+    df.plot(x='Name', y=['Max left', 'Max right'], kind='bar')
+    plt.xticks(rotation=90)
     plt.xlabel("Strength (Newtons)")
     
     if test == 'NORDIC':
