@@ -127,7 +127,7 @@ with st.form(key='my_form'):
 
     perc_margin = st.slider("Select percent margin", 1, 50, 1)
     splits = st.slider("Select the number of splits", 1, 100, 1)
-    zoom = st.radio("Zoom in the graph", ("Yes", "No"))
+    zoom = st.radio("Zoom in the graph", ("No","Yes"))
 
     st.form_submit_button()
 
