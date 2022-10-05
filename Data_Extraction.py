@@ -16,6 +16,7 @@ st.sidebar.markdown("- The app accepts multiple excel files and produces one out
 st.sidebar.markdown("- The aggregated data columns are as follows: (Name, Device, Team, Date, Max left, Max right, Comment)")
 st.sidebar.markdown("- After the user uploads the files, a table is shown below with the preview of the output, a user can then decide to modify the time interval in order to capture the entire testing session")
 st.sidebar.markdown("- The time interval functionality's goal is to capture the data for one player within multiple files but also to get rid of the files produced by mistake during testing")
+st.sidebar.markdown("- The user can download the output as seen in the preview data table")
 
 st.title("Strength data summary")
 
