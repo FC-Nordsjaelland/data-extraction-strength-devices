@@ -201,13 +201,10 @@ key='download-csv'
 )
 
 
-with st.form(key='my_form2'):
-    test = st.radio("Choose a test to visualize", ("NORDIC", "GROIN"))
-    st.form_submit_button(label='Visualize')
+# with st.form(key='my_form2'):
+#     test = st.radio("Choose a test to visualize", ("NORDIC", "GROIN"))
+#     st.form_submit_button(label='Visualize')
 
-
-
-try:
     
     # if test == 'NORDIC':
     #     filter_col = [col for col in df if col.startswith("NORDIC")]
@@ -217,8 +214,6 @@ try:
     #     filter_col = [col for col in df if col.startswith("GROIN")]
     #     df1 = df[filter_col]
 
-    df.plot(x='Name', y=['Max left', 'Max right'], kind='bar')
-    plt.xtiks(rotation=45)
-    st.pyplot(fig=plt)
-except:
-    pass
+df.plot(x='Name', y=['Max left', 'Max right'], kind='bar')
+plt.xtiks(rotation=45)
+st.pyplot(fig=plt)
