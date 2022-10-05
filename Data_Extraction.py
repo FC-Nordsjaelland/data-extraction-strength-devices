@@ -215,8 +215,18 @@ elif test == 'GROIN':
     df = df[df['Device'].str.startswith("GROIN")]
 
 try:
+
     df.plot(x='Name', y=['Max left', 'Max right'], kind='bar')
-    plt.xticks(rotation=70)
+    plt.xticks(rotation=40)
+    plt.ylabel("Strength (Newtons)")
+    
+    if test == 'NORDIC':
+        plt.title("Hamstring Strength")
+
+    elif test == 'GROIN':
+        plt.title("Adductor Strength")
+
+
     st.pyplot(fig=plt)
 except:
     pass
