@@ -201,7 +201,7 @@ key='download-csv'
 )
 
 fig, ax = plt.subplots()
-df.plot(x='Name', y=['Max left', 'Max right'], kind='bar')
+ax.plot(x=df['Name'], y=df[['Max left', 'Max right']], kind='bar')
 st.pyplot(fig)
 
 
