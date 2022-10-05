@@ -148,15 +148,7 @@ if uploaded_file is not None:
 
     with open(ZipfileDotZip, "rb") as fp: 
         btn = st.download_button(
-            label="Download ZIP", 
+            label="Download output (ZIP)", 
             data=fp, 
             file_name="output.zip", 
             mime="application/zip" )
-
-# st.download_button(
-# "Press to Download",
-# csv,
-# output_name + ".csv",
-# "text/csv",
-# key='download-csv'
-# )
