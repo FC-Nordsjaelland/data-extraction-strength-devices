@@ -92,7 +92,7 @@ def preprocess(uploaded_files, start_date, end_date):
     final_df['Max right'] = final_df['Max right'].round(decimals=1)
     final_df = final_df.drop(["time_difference"], axis=1)
     final_df = final_df.reset_index(drop=True)
-    final_df['Percentage difference'] = percentage_difference(df['Max left'], df['Max right'])
+    final_df['Percentage difference'] = df[['Max left','Max right']].apply(percentage_difference())
     final_df['Percentage difference'] = final_df['Percentage difference'].round(decimals=1)
     final_df = final_df[['Date','Team','Name', 'Device','Max left', 'Max right', 'Percentage difference', 'Comment']]
     return final_df
