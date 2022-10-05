@@ -205,18 +205,16 @@ with st.form(key='my_form2'):
     test = st.radio("Choose a test to visualize", ("NORDIC", "GROIN"))
     st.form_submit_button(label='Visualize')
 
-    df = df[df['Device'].str.startswith("NORDIC")]
+   
 
     
-    # if test == 'NORDIC':
-    #     filter_col = [col for col in df if col.startswith("NORDIC")]
-    #     df1 = df[filter_col]
+if test == 'NORDIC':
+    df = df[df['Device'].str.startswith("NORDIC")]
 
-    # elif test == 'GROIN':
-    #     filter_col = [col for col in df if col.startswith("GROIN")]
-    #     df1 = df[filter_col]
+elif test == 'GROIN':
+    df = df[df['Device'].str.startswith("NORDIC")]
+
 try:
-
     df.plot(x='Name', y=['Max left', 'Max right'], kind='bar')
     plt.xticks(rotation=45)
     st.pyplot(fig=plt)
