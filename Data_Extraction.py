@@ -193,8 +193,7 @@ end_date = '2025-08-08 12:00:00'
 
 df = preprocess(uploaded_files=uploaded_files, start_date=start_date, end_date=end_date)
 AgGrid(df, fit_columns_on_grid_load=True)
-st.write(df['Date'].dtypes)
-df = pd.to_datetime(df['Date'], utc=False)
+df['Date'] = pd.to_datetime(df['Date'])
 st.write(df['Date'].dtypes)
 # st.dataframe(df)
 csv = convert_df(df)
