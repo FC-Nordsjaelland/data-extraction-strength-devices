@@ -99,7 +99,7 @@ def preprocess(uploaded_files, start_date, end_date):
     return final_df
 
 def convert_df(df):
-    return df.to_csv(index=False).encode('utf-8')
+    return df.to_csv(index=False, date_format='%m.%d.%Y').encode('utf-8')
 
 min_date = "2022-01-01"
 min_date = datetime.datetime.strptime(min_date, '%Y-%m-%d')
