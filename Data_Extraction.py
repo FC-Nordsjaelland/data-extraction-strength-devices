@@ -175,7 +175,7 @@ df = preprocess(uploaded_files=uploaded_files, start_date=start_date, end_date=e
 AgGrid(df, fit_columns_on_grid_load=True)
 df['Date'] = pd.to_datetime(df['Date'])
 csv = convert_df(df)
-df['Percentage difference'] = df['Percentage difference'] + " %"
+df['Percentage difference'] = df['Percentage difference'].astype(str) + " %"
 
 st.download_button(
 "Press to Download",
