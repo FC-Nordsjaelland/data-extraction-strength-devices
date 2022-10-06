@@ -99,7 +99,7 @@ def preprocess(uploaded_files, start_date, end_date):
     return final_df
 
 def convert_df(df):
-    return df.to_csv(index=False, date_format='%Y.%m.%d').encode('utf-8')
+    return df.to_csv(index=False, date_format='%m.%d.%Y').encode('utf-8')
 
 min_date = "2022-01-01"
 min_date = datetime.datetime.strptime(min_date, '%Y-%m-%d')
@@ -194,8 +194,6 @@ end_date = '2025-08-08 12:00:00'
 df = preprocess(uploaded_files=uploaded_files, start_date=start_date, end_date=end_date)
 AgGrid(df, fit_columns_on_grid_load=True)
 df['Date'] = pd.to_datetime(df['Date'])
-st.write(df['Date'].dtypes)
-# st.dataframe(df)
 csv = convert_df(df)
 
 st.download_button(
