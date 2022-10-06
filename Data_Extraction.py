@@ -152,26 +152,6 @@ with st.form(key='my_form'):
 
 
 
-            
-        # try:
-        #     st.write("Checkpoint2")
-        #     uploaded_data_read = [pd.read_excel(file, header=None) for file in uploaded_files]
-        #     st.write("Checkpoint3")
-        #     raw_data = pd.concat(uploaded_data_read)
-        #     st.write("Checkpoint4")
-        #     raw_data = raw_data[raw_data[0]=="Date"]
-        #     raw_data[1] = pd.to_datetime(raw_data[1], format='%d.%m.%Y %H:%M:%S')
-        #     min_date = raw_data[1].min()
-        #     max_date = raw_data[1].max()
-        # except:
-        #     pass
-
-
-
-
-
-
-
 # path = input("Enter the directory path where the Excel files are stored: ")
 # path2 = input("Enter the directory path where the CSV output is saved: ")
 # date1 = input("Enter the starting date and time (format - 2022-03-04 12:00:00): ")
@@ -204,12 +184,10 @@ output_name + ".csv",
 key='download-csv'
 )
 
-
+st.write("")
 with st.form(key='my_form2'):
     test = st.radio("Choose a test to visualize", ("NORDIC", "GROIN"))
     st.form_submit_button(label='Visualize')
-
-   
 
     
 if test == 'NORDIC':
@@ -221,10 +199,11 @@ elif test == 'GROIN':
 try:
 
     df.plot(x='Name', y=['Max left', 'Max right'], kind='bar', width=0.6)
+
     plt.xticks(rotation=75)
     plt.xlabel("")
     plt.ylabel("Strength (Newtons)")
-    
+    plt.bar_label(df['Percentage difference'])
     if test == 'NORDIC':
         plt.title("Hamstring Strength")
 
