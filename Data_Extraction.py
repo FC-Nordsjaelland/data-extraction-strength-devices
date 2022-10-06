@@ -205,7 +205,7 @@ try:
     plt.xticks(rotation=75)
     plt.xlabel("")
     plt.ylabel("Strength (Newtons)")
-    plt.rcParams.update({'font.size': 5})
+    plt.rcParams.update({'font.size': 7})
     ax.bar_label(ax.containers[0], df['Percentage difference'])
     if test == 'NORDIC':
         plt.title("Hamstring Strength")
