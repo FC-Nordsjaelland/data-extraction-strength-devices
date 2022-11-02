@@ -200,7 +200,12 @@ elif test == 'GROIN':
     df = df[df['Device'].str.startswith("GROIN")]
 
 try:
-    df = df.sort_values(by=['Max right'])
+    sorter = st.radio("Sort the values by", ("Max left", "Max right"))
+    if sorter == 'Max left':
+        df = df.sort_values(by=['Max left'])
+    elif sorter == 'Max right':
+        df = df.sort_values(by=['Max right'])
+        
     ax = df.plot(x='Name', y=['Max left', 'Max right'], kind='bar', width=0.6)
 
     plt.xticks(rotation=75)
