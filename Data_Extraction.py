@@ -224,6 +224,7 @@ try:
 
     st.pyplot(fig=plt)
 
+    plt.subplots_adjust(bottom=0.15)
     fn = 'scatter.png'
     plt.savefig(fn)
     with open(fn, "rb") as img:
