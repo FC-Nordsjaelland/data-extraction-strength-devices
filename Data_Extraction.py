@@ -1,5 +1,6 @@
 #%%
 import pandas as pd
+import io
 import matplotlib.pyplot as plt
 import datetime
 from datetime import time
@@ -222,5 +223,15 @@ try:
     plt.legend(fontsize=7)
 
     st.pyplot(fig=plt)
+
+    fn = 'scatter.png'
+    plt.savefig(fn)
+    with open(fn, "rb") as img:
+        btn = st.download_button(
+            label="Download image",
+            data=img,
+            file_name=fn,
+            mime="image/png"
+    )
 except:
     pass
