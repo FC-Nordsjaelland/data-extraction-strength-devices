@@ -190,6 +190,11 @@ st.write("")
 st.write("")
 with st.form(key='my_form2'):
     test = st.radio("Choose a test to visualize", ("NORDIC", "GROIN"))
+    sorter = st.radio("Sort the values by", ("Max left", "Max right"))
+    if sorter == 'Max right':
+        df = df.sort_values(by=['Max right'])
+    elif sorter == 'Max left':
+        df = df.sort_values(by=['Max left'])
     st.form_submit_button(label='Visualize')
 
     
@@ -200,12 +205,7 @@ elif test == 'GROIN':
     df = df[df['Device'].str.startswith("GROIN")]
 
 try:
-    sorter = st.radio("Sort the values by", ("Max left", "Max right"))
-    if sorter == 'Max left':
-        df = df.sort_values(by=['Max left'])
-    elif sorter == 'Max right':
-        df = df.sort_values(by=['Max right'])
-        
+
     ax = df.plot(x='Name', y=['Max left', 'Max right'], kind='bar', width=0.6)
 
     plt.xticks(rotation=75)
