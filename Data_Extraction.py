@@ -224,12 +224,12 @@ try:
 
     st.pyplot(fig=plt)
 
-    plt.subplots_adjust(bottom=0.15)
+    plt.subplots_adjust(bottom=0.35)
     fn = 'scatter.png'
     plt.savefig(fn)
     with open(fn, "rb") as img:
         btn = st.download_button(
-            label="Download image",
+            label="Download",
             data=img,
             file_name=fn,
             mime="image/png"
