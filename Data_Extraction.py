@@ -98,7 +98,8 @@ def preprocess(uploaded_files, start_date, end_date):
     final_df['Percentage difference'] = percentage_difference(final_df['Max left'], final_df['Max right'])
     final_df['Percentage difference'] = final_df['Percentage difference'].round(decimals=1)
     final_df['Mean strength'] = final_df[['Max left', 'Max right']].mean()
-    final_df = final_df[['Date','Team','Name', 'Device','Max left', 'Max right', 'Percentage difference', 'Comment']]
+    final_df['Mean strength'] = final_df['Mean strength'].round(decimals=1)
+    final_df = final_df[['Date','Team','Name', 'Device','Max left', 'Max right', 'Mean strength', 'Percentage difference', 'Comment']]
     return final_df
 
 def convert_df(df):
