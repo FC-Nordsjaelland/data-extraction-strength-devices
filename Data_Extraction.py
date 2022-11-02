@@ -98,7 +98,10 @@ def preprocess(uploaded_files, start_date, end_date):
     final_df['Percentage difference'] = percentage_difference(final_df['Max left'], final_df['Max right'])
     final_df['Percentage difference'] = final_df['Percentage difference'].round(decimals=1)
     final_df['Mean strength'] = (final_df['Max left'] + final_df['Max right'])/2
+    final_df['Mean strength'] = final_df['Mean strength'].fillna(df['Max left'])
+    final_df['Mean strength'] = final_df['Mean strength'].fillna(df['Max right'])
     final_df['Mean strength'] = final_df['Mean strength'].round(decimals=1)
+
     final_df = final_df[['Date','Team','Name', 'Device','Max left', 'Max right', 'Mean strength', 'Percentage difference', 'Comment']]
     return final_df
 
@@ -193,11 +196,13 @@ st.write("")
 st.write("")
 with st.form(key='my_form2'):
     test = st.radio("Choose a test to visualize", ("NORDIC", "GROIN"))
-    sorter = st.radio("Sort the values by", ("Max right", "Max left"))
+    sorter = st.radio("Sort the values by", ("Max right", "Max left", "Mean strength"))
     if sorter == 'Max right':
         df = df.sort_values(by=['Max right'])
     elif sorter == 'Max left':
         df = df.sort_values(by=['Max left'])
+    elif sorter == 'Mean strength':
+        df = df.sort_values(by=['Mean strength'])
     st.form_submit_button(label='Visualize')
 
     
