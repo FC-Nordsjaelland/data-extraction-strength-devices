@@ -98,7 +98,6 @@ def preprocess(uploaded_files, start_date, end_date):
     final_df['Percentage difference'] = percentage_difference(final_df['Max left'], final_df['Max right'])
     final_df['Percentage difference'] = final_df['Percentage difference'].round(decimals=1)
     final_df['Mean strength'] = (final_df['Max left'] + final_df['Max right'])/2
-    final_df['Mean strength'] = final_df['Mean strength'].fillna(df['Max left'])
     final_df['Mean strength'] = final_df['Mean strength'].fillna(df['Max right'])
     final_df['Mean strength'] = final_df['Mean strength'].round(decimals=1)
 
