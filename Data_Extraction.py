@@ -42,13 +42,13 @@ def flatten_xlsx(path):
 
     date = metadata[metadata[0]=='Date'][1][0]
     device = metadata[metadata[0]=='Device'][1][1]
-    team = metadata[metadata[0]=='Team'][1][2]
+    team = metadata[metadata[0]=='Team'][1][3]
 
-    name = metadata[metadata[0]=='Name'][1][3]
+    name = metadata[metadata[0]=='Name'][1][4]
     name = name.replace(" - nordic", "") #remove those occurences from the names
     name = name.replace("1","") #sometimes it states " - nordic1", that line removes the issue
 
-    comment = metadata[metadata[0]=='Comment'][1][4]
+    comment = metadata[metadata[0]=='Comment'][1][5]
     left_max = tests[1].max()
     right_max = tests[2].max()
 
