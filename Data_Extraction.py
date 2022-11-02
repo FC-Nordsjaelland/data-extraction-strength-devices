@@ -190,7 +190,7 @@ st.write("")
 st.write("")
 with st.form(key='my_form2'):
     test = st.radio("Choose a test to visualize", ("NORDIC", "GROIN"))
-    sorter = st.radio("Sort the values by", ("Max left", "Max right"))
+    sorter = st.radio("Sort the values by", ("Max right", "Max left"))
     if sorter == 'Max right':
         df = df.sort_values(by=['Max right'])
     elif sorter == 'Max left':
