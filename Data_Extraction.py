@@ -224,9 +224,9 @@ try:
 
     st.pyplot(fig=plt)
 
-    plt.subplots_adjust(bottom=0.35)
+    plt.subplots_adjust(bottom=0.30)
     fn = 'scatter.png'
-    plt.savefig(fn)
+    plt.savefig(fn, dpi=1000)
     with open(fn, "rb") as img:
         btn = st.download_button(
             label="Download",
