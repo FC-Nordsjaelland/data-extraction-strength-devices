@@ -42,6 +42,7 @@ def flatten_xlsx(path):
 
     date = metadata[metadata[0]=='Date'][1][0]
     device = metadata[metadata[0]=='Device'][1][1]
+
     team = metadata[metadata[0]=='Team'][1][3]
 
     name = metadata[metadata[0]=='Name'][1][4]
@@ -199,7 +200,7 @@ elif test == 'GROIN':
     df = df[df['Device'].str.startswith("GROIN")]
 
 try:
-
+    df = df.sort_values(by=['Max right'])
     ax = df.plot(x='Name', y=['Max left', 'Max right'], kind='bar', width=0.6)
 
     plt.xticks(rotation=75)
