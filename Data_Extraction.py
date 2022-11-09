@@ -10,6 +10,11 @@ from st_aggrid import AgGrid
 
 #%%
 
+players = st.secrets['players']
+usernames = st.secrets['usernames']
+
+username_dict = dict(zip(players, usernames))
+
 st.set_page_config(page_title="Strength data summary", layout ='wide')
 st.sidebar.markdown("## Strength data summary")
 
@@ -101,7 +106,8 @@ def preprocess(uploaded_files, start_date, end_date):
     final_df['Mean strength'] = final_df['Mean strength'].round(decimals=1)
     final_df['Percentage difference'] = final_df['Percentage difference'].fillna(0)
     final_df['Mean strength'].fillna(final_df['Max right'], inplace=True)
-    final_df = final_df[['Date','Team','Name', 'Device','Max left', 'Max right', 'Mean strength', 'Percentage difference', 'Comment']]
+    final_df['Kitman tag'] = final_df['Name'].map(username_dict)
+    final_df = final_df[['Date','Team',"Kitman tag", 'Name', 'Device','Max left', 'Max right', 'Mean strength', 'Percentage difference', 'Comment']]
     return final_df
 
 def convert_df(df):
