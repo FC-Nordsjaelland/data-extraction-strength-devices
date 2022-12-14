@@ -107,7 +107,15 @@ def preprocess(uploaded_files, start_date, end_date):
     final_df['Percentage difference'] = final_df['Percentage difference'].fillna(0)
     final_df['Mean strength'].fillna(final_df['Max right'], inplace=True)
     final_df['Kitman tag'] = final_df['Name'].map(username_dict)
-    final_df = final_df[['Date','Team',"Kitman tag", 'Name', 'Device','Max left', 'Max right', 'Mean strength', 'Percentage difference', 'Comment']]
+    final_df['Term'] = " "
+    final_df['Year'] = df['Date'].dt.year 
+    final_df['Season'] = " "
+    final_df['Type'] = " "
+
+
+    #name, date, term, year, season, type (pre/in/etc), 
+    final_df = final_df[['Name', 'Date', 'Term', 'Year', 'Season', 'Type', 'Device','Max left', 'Max right', 'Mean strength', 'Percentage difference', 'Comment']]
+    # final_df = final_df[['Date','Team',"Kitman tag", 'Name', 'Device','Max left', 'Max right', 'Mean strength', 'Percentage difference', 'Comment']]
     return final_df
 
 def convert_df(df):
