@@ -111,7 +111,7 @@ def preprocess(uploaded_files):
     df['DoB'] = pd.to_datetime(df['DoB'], format='%Y.%m.%d', errors='coerce').fillna(np.nan)
     mask = pd.notnull(df['DoB'])
     df.loc[mask, 'age'] = ((df.loc[mask, 'date'] - df.loc[mask, 'DoB']) / pd.Timedelta(days=365)).astype(int)
-    df['age'] = df['age'].apply(lambda x: np.nan if x > 50 else x)
+    df['age'] = pd.to_numeric(df['age'], errors='coerce')
     df['date'] = df['date'].dt.strftime('%m-%d-%y')
     df['DoB'] = df['DoB'].dt.strftime('%Y-%m-%d')
         
@@ -123,7 +123,7 @@ def preprocess(uploaded_files):
     return final_df
 
 def convert_df(df):
-    return df.to_csv(index=False, date_format='%m.%d.%Y').encode('utf-8')
+    return df.to_csv(index=False, date_format='%m.%d.%Y', float_format='%.0f').encode('utf-8')
 
 
     
