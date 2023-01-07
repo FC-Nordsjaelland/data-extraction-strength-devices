@@ -123,7 +123,7 @@ def preprocess(uploaded_files):
     return final_df
 
 def convert_df(df):
-    return df.to_csv(index=False, date_format='%m.%d.%Y', float_format='%.0f').encode('utf-8')
+    return df.to_csv(index=False, date_format='%m.%d.%Y').encode('utf-8')
 
 
     
