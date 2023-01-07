@@ -129,17 +129,17 @@ def convert_df(df):
 uploaded_files = st.file_uploader("Upload xlsx files below", type="xlsx", accept_multiple_files=True)
     
 if uploaded_files is not None:
-    # try:
+    try:
         df = preprocess(uploaded_files=uploaded_files)
         st.write("")
         st.write("")
         st.write("")    
         st.write("")
         AgGrid(df, fit_columns_on_grid_load=True)
-    # except:
-        # pass
+    except:
+        pass
 
-    # try:
+    try:
         csv = convert_df(df)
         st.download_button(
         "Press to Download",
@@ -148,8 +148,8 @@ if uploaded_files is not None:
         "text/csv",
         key='download-csv'
         )
-    # except:
-        # pass
+    except:
+        pass
 
     #     st.write("")
     #     st.write("")
