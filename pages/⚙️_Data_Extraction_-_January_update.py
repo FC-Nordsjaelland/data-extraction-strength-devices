@@ -7,13 +7,9 @@ from datetime import time
 import streamlit as st
 from st_aggrid import AgGrid
 # warnings.filterwarnings("ignore")
+import numpy as np
 
 #%%
-
-players = st.secrets['players']
-usernames = st.secrets['usernames']
-
-username_dict = dict(zip(players, usernames))
 
 st.set_page_config(page_title="Strength data summary", layout ='wide')
 st.sidebar.markdown("## Strength data summary")
@@ -51,12 +47,7 @@ def flatten_xlsx(path):
         team = metadata[metadata[0]=='Team'][1].values[0]
         name = metadata[metadata[0]=='Name'][1].values[0]
 
-        tests = data[[1,2]][7::]
-        tests.columns = ['Left', 'Right']
-        tests = tests.astype("float")
-        left_max = tests['Left'].max()
-        right_max = tests["Right"].max()
-
+       
         
         right_col_data = data[[4,5,6,7,8]]
 
@@ -73,23 +64,34 @@ def flatten_xlsx(path):
         weight = right_col_data[right_col_data[4]=='Weight'][5].values[0]
         position = right_col_data[right_col_data[4]=='Position'][5].values[0]
         id = right_col_data[right_col_data[4]=='ID'][5].values[0]
-
             
         try:
             lever_knee = right_col_data[right_col_data[4]=='Hip-Knee Lever'][5].values[0]
             lever_groin = right_col_data[right_col_data[4]=='Hip-Ankle Lever'][5].values[0]
         except:
-            lever_knee = 0
-            lever_groin = 0
+            lever_knee = np.nan
+            lever_groin = np.nan
+        
+        try:
+            tests = data[[1,2]][7::]
+            tests.columns = ['Left', 'Right']
+            tests = tests.astype("float")
+            left_max = tests['Left'].max()
+            right_max = tests["Right"].max()
+        except:
+            left_max = np.nan
+            right_max = np.nan
     
 
-        x = [[name, id, gender, dob, 0, height, weight, lever_knee, lever_groin, team, position, date, year, term, season_period, test_type, test, "Right", measure, right_max, nrs, id + test + "".join(date.split("."))],
-            [name, id, gender, dob, 0, height, weight, lever_knee, lever_groin, team, position, date, year, term, season_period, test_type, test, "Left", measure, left_max, nrs, id + test + "".join(date.split("."))]]
+        x = [[name, id, gender, dob, np.nan, height, weight, lever_knee, lever_groin, team, position, date, year, term, season_period, test_type, test, "Right", measure, right_max, nrs, id + test + "".join(date.split("."))],
+            [name, id, gender, dob, np.nan, height, weight, lever_knee, lever_groin, team, position, date, year, term, season_period, test_type, test, "Left", measure, left_max, nrs, id + test + "".join(date.split("."))]]
     except:
-        x = [[name, 0, 0, 0, 0, 0, 0, 0, 0, team, 0, date, year, term, season_period, test_type, test, "Right", measure, right_max, nrs, 0],
-            [name, 0, 0, 0, 0, 0, 0, 0, 0, team, 0, date, year, term, season_period, test_type, test, "Left", measure, left_max, nrs, 0]]
+        x = [[name, np.nan, np.nan, np.nan, np.nan, np.nan, np.nan, np.nan, np.nan, team, np.nan, date, year, term, season_period, test_type, test, "Right", measure, right_max, nrs, np.nan],
+            [name, np.nan, np.nan, np.nan, np.nan, np.nan, np.nan, np.nan, np.nan, team, np.nan, date, year, term, season_period, test_type, test, "Left", measure, left_max, nrs, np.nan]]
 
     return x
+
+#%%
 
 def preprocess(uploaded_files):
 
@@ -105,6 +107,7 @@ def preprocess(uploaded_files):
 
     
     df = pd.DataFrame(players_data, columns=['Name', 'id', 'Gender', 'DoB', 'age', 'height', 'body_mass', 'lever_knee', 'lever_groin', 'team', 'position', 'date', 'year', 'term', 'season_period', 'type', 'test', 'leg', 'measure', 'strength', 'NRS', 'test_id'])
+    df = df.dropna(subset=['strength'])
     df['date'] = pd.to_datetime(df['date'], format='%d.%m.%Y', errors='coerce').fillna('0000-00-00')
     df['DoB'] = pd.to_datetime(df['DoB'], format='%Y.%m.%d', errors='coerce').fillna('0000-00-00')
     df['age'] = ((df['date'] - df['DoB']) / pd.Timedelta(days=365)).astype(int)
@@ -127,17 +130,17 @@ def convert_df(df):
 uploaded_files = st.file_uploader("Upload xlsx files below", type="xlsx", accept_multiple_files=True)
     
 if uploaded_files is not None:
-    try:
+    # try:
         df = preprocess(uploaded_files=uploaded_files)
         st.write("")
         st.write("")
         st.write("")    
         st.write("")
         AgGrid(df, fit_columns_on_grid_load=True)
-    except:
-        pass
+    # except:
+    #     pass
 
-    try:
+    # try:
         csv = convert_df(df)
         st.download_button(
         "Press to Download",
@@ -146,8 +149,8 @@ if uploaded_files is not None:
         "text/csv",
         key='download-csv'
         )
-    except:
-        pass
+    # except:
+    #     pass
 
     #     st.write("")
     #     st.write("")
