@@ -46,8 +46,6 @@ def flatten_xlsx(path):
         measure = 'Newtons'
         team = metadata[metadata[0]=='Team'][1].values[0]
         name = metadata[metadata[0]=='Name'][1].values[0]
-
-       
         
         right_col_data = data[[4,5,6,7,8]]
 
@@ -86,8 +84,8 @@ def flatten_xlsx(path):
         x = [[name, id, gender, dob, np.nan, height, weight, lever_knee, lever_groin, team, position, date, year, term, season_period, test_type, test, "Right", measure, right_max, nrs, id + test + "".join(date.split("."))],
             [name, id, gender, dob, np.nan, height, weight, lever_knee, lever_groin, team, position, date, year, term, season_period, test_type, test, "Left", measure, left_max, nrs, id + test + "".join(date.split("."))]]
     except:
-        x = [[name, np.nan, np.nan, np.nan, np.nan, np.nan, np.nan, np.nan, np.nan, team, np.nan, date, year, term, season_period, test_type, test, "Right", measure, right_max, nrs, np.nan],
-            [name, np.nan, np.nan, np.nan, np.nan, np.nan, np.nan, np.nan, np.nan, team, np.nan, date, year, term, season_period, test_type, test, "Left", measure, left_max, nrs, np.nan]]
+        x = [[name, np.nan, np.nan, np.nan, np.nan, np.nan, np.nan, np.nan, np.nan, team, np.nan, date, year, term, season_period, test_type, test, "Right", measure, np.nan, nrs, np.nan],
+            [name, np.nan, np.nan, np.nan, np.nan, np.nan, np.nan, np.nan, np.nan, team, np.nan, date, year, term, season_period, test_type, test, "Left", measure, np.nan, nrs, np.nan]]
 
     return x
 
@@ -108,10 +106,11 @@ def preprocess(uploaded_files):
     
     df = pd.DataFrame(players_data, columns=['Name', 'id', 'Gender', 'DoB', 'age', 'height', 'body_mass', 'lever_knee', 'lever_groin', 'team', 'position', 'date', 'year', 'term', 'season_period', 'type', 'test', 'leg', 'measure', 'strength', 'NRS', 'test_id'])
     df = df.dropna(subset=['strength'])
+    df = df.dropna(subset=['id'])
     df['date'] = pd.to_datetime(df['date'], format='%d.%m.%Y', errors='coerce').fillna('0000-00-00')
     df['DoB'] = pd.to_datetime(df['DoB'], format='%Y.%m.%d', errors='coerce').fillna('0000-00-00')
     df['age'] = ((df['date'] - df['DoB']) / pd.Timedelta(days=365)).astype(int)
-    df['age'] = df['age'].apply(lambda x: 0 if x > 50 else x)
+    df['age'] = df['age'].apply(lambda x: np.nan if x > 50 else x)
     df['date'] = df['date'].dt.strftime('%m-%d-%y')
     df['DoB'] = df['DoB'].dt.strftime('%Y-%m-%d')
         
@@ -130,17 +129,17 @@ def convert_df(df):
 uploaded_files = st.file_uploader("Upload xlsx files below", type="xlsx", accept_multiple_files=True)
     
 if uploaded_files is not None:
-    try:
+    # try:
         df = preprocess(uploaded_files=uploaded_files)
         st.write("")
         st.write("")
         st.write("")    
         st.write("")
         AgGrid(df, fit_columns_on_grid_load=True)
-    except:
-        pass
+    # except:
+        # pass
 
-    try:
+    # try:
         csv = convert_df(df)
         st.download_button(
         "Press to Download",
@@ -149,8 +148,8 @@ if uploaded_files is not None:
         "text/csv",
         key='download-csv'
         )
-    except:
-        pass
+    # except:
+        # pass
 
     #     st.write("")
     #     st.write("")
