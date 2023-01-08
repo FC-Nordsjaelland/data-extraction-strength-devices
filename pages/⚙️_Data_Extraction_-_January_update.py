@@ -41,6 +41,7 @@ def flatten_xlsx(path):
         data.reset_index()
         metadata = data[[0,1]]
         date = metadata[metadata[0]=='Date'][1][0].split()[0]
+        dateid = metadata[metadata[0]=='Date'][1][0]
         year = metadata[metadata[0]=='Date'][1][0].split()[0].split(".")[-1]
         test = metadata[metadata[0]=='Exercise'][1].values[0]
         measure = 'Newtons'
@@ -81,8 +82,8 @@ def flatten_xlsx(path):
             right_max = np.nan
     
 
-        x = [[name, id, gender, dob, np.nan, height, weight, lever_knee, lever_groin, team, position, date, year, term, season_period, test_type, test, "Right", measure, right_max, nrs, id + test + "".join(date.split("."))],
-            [name, id, gender, dob, np.nan, height, weight, lever_knee, lever_groin, team, position, date, year, term, season_period, test_type, test, "Left", measure, left_max, nrs, id + test + "".join(date.split("."))]]
+        x = [[name, id, gender, dob, np.nan, height, weight, lever_knee, lever_groin, team, position, date, year, term, season_period, test_type, test, "Right", measure, right_max, nrs, id + test + (id + test + "".join(dateid.split("."))).replace(" ", "").replace(":", "")],
+            [name, id, gender, dob, np.nan, height, weight, lever_knee, lever_groin, team, position, date, year, term, season_period, test_type, test, "Left", measure, left_max, nrs, id + test + (id + test + "".join(dateid.split("."))).replace(" ", "").replace(":", "")]]
     except:
         x = [[name, np.nan, np.nan, np.nan, np.nan, np.nan, np.nan, np.nan, np.nan, team, np.nan, date, year, term, season_period, test_type, test, "Right", measure, np.nan, nrs, np.nan],
             [name, np.nan, np.nan, np.nan, np.nan, np.nan, np.nan, np.nan, np.nan, team, np.nan, date, year, term, season_period, test_type, test, "Left", measure, np.nan, nrs, np.nan]]
