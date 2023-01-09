@@ -29,8 +29,8 @@ def flatten_xlsx(path):
         dateid = metadata[metadata[0] == "Date"][1][0]
         year = metadata[metadata[0] == "Date"][1][0].split()[0].split(".")[-1]
         test = metadata[metadata[0] == "Exercise"][1].values[0]
-        if test == 'Isometric':
-            test = 'Hamstring'
+        if test == "Isometric":
+            test = "Hamstring"
         measure = "Newtons"
         team = metadata[metadata[0] == "Team"][1].values[0]
         name = metadata[metadata[0] == "Name"][1].values[0]
@@ -359,7 +359,7 @@ if uploaded_files is not None:
 
     with st.form(key="my_form2"):
         test = st.radio(
-            "Choose a test to visualize", ("Nordic", "Adduction", "Isometric")
+            "Choose a test to visualize", ("Nordic", "Hamstring", "Isometric")
         )
         sorter = st.radio(
             "Sort the values by", ("Max right", "Max left", "Mean strength")
@@ -376,9 +376,9 @@ if uploaded_files is not None:
             joined_df = joined_df[joined_df["Test"] == "Nordic"]
             title = "Nordic"
 
-        elif test == "Adduction":
-            joined_df = joined_df[joined_df["Test"] == "Adduction"]
-            title = "Adduction"
+        elif test == "Hamstring":
+            joined_df = joined_df[joined_df["Test"] == "Hamstring"]
+            title = "Hamstring"
 
         elif test == "Isometric":
             joined_df = joined_df[joined_df["Test"] == "Isometric"]
