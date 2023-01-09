@@ -29,6 +29,8 @@ def flatten_xlsx(path):
         dateid = metadata[metadata[0] == "Date"][1][0]
         year = metadata[metadata[0] == "Date"][1][0].split()[0].split(".")[-1]
         test = metadata[metadata[0] == "Exercise"][1].values[0]
+        if test == 'Isometric':
+            test = 'Hamstring'
         measure = "Newtons"
         team = metadata[metadata[0] == "Team"][1].values[0]
         name = metadata[metadata[0] == "Name"][1].values[0]
