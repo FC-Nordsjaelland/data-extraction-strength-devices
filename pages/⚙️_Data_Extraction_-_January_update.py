@@ -155,7 +155,7 @@ def flatten_xlsx(path):
                 test,
                 "Right",
                 measure,
-                np.nan,
+                right_max,
                 nrs,
                 np.nan,
             ],
@@ -179,7 +179,7 @@ def flatten_xlsx(path):
                 test,
                 "Left",
                 measure,
-                np.nan,
+                left_max,
                 nrs,
                 np.nan,
             ],
@@ -228,7 +228,6 @@ def preprocess(uploaded_files):
         ],
     )
     df = df.dropna(subset=["strength"])
-    df = df.dropna(subset=["id"])
     df["date"] = pd.to_datetime(df["date"], format="%d.%m.%Y", errors="coerce").fillna(
         np.nan
     )
@@ -331,28 +330,28 @@ uploaded_files = st.file_uploader(
 )
 
 if uploaded_files is not None:
-    # try:
-    df = preprocess(uploaded_files=uploaded_files)
-    st.write("")
-    st.write("")
-    st.write("")
-    st.write("")
-    joined_df = df_summary(df)
-    AgGrid(joined_df, fit_columns_on_grid_load=True)
-    # except:
-    # pass
+    try:
+        df = preprocess(uploaded_files=uploaded_files)
+        st.write("")
+        st.write("")
+        st.write("")
+        st.write("")
+        joined_df = df_summary(df)
+        AgGrid(joined_df, fit_columns_on_grid_load=True)
+    except:
+        pass
 
-    # try:
-    csv = convert_df(df)
-    st.download_button(
-        "Press to Download the full mastersheet version",
-        csv,
-        "output.csv",
-        "text/csv",
-        key="download-csv",
-    )
-    # except:
-    # pass
+    try:
+        csv = convert_df(df)
+        st.download_button(
+            "Press to Download the full mastersheet version",
+            csv,
+            "output.csv",
+            "text/csv",
+            key="download-csv",
+        )
+    except:
+        pass
 
     st.write("")
     st.write("")
