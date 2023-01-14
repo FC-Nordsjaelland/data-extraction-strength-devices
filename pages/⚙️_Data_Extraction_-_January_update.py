@@ -44,15 +44,24 @@ def flatten_xlsx(path):
         term = season_split[1]
         season_period = season_split[0]
         test_type = right_col_data[right_col_data[7] == "Test Type"][8].values[0]
-
-        dob = right_col_data[right_col_data[4] == "Date of birth (dd/mm/yyyy)"][
-            5
-        ].values[0]
-        gender = right_col_data[right_col_data[4] == "Gender"][5].values[0]
-        height = right_col_data[right_col_data[4] == "Height"][5].values[0]
-        weight = right_col_data[right_col_data[4] == "Weight"][5].values[0]
-        position = right_col_data[right_col_data[4] == "Position"][5].values[0]
-        id = right_col_data[right_col_data[4] == "ID"][5].values[0]
+        try:
+            dob = right_col_data[right_col_data[4] == "Date of birth (dd/mm/yyyy)"][
+                5
+            ].values[0]
+            gender = right_col_data[right_col_data[4] == "Gender"][5].values[0]
+            height = right_col_data[right_col_data[4] == "Height"][5].values[0]
+            weight = right_col_data[right_col_data[4] == "Weight"][5].values[0]
+            position = right_col_data[right_col_data[4] == "Position"][5].values[0]
+            id = right_col_data[right_col_data[4] == "ID"][5].values[0]
+        except:
+            dob, gender, height, weight, position, id = (
+                np.nan,
+                np.nan,
+                np.nan,
+                np.nan,
+                np.nan,
+                np.nan,
+            )
 
         try:
             lever_knee = right_col_data[right_col_data[4] == "Hip-Knee Lever"][
