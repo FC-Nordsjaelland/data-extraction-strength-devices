@@ -46,21 +46,30 @@ def flatten_xlsx(path):
         nrs_right = None
         nrs_left = None
         if "NRS (Pain during Test)" in right_col_data[7].values:
-            nrs_right = right_col_data[right_col_data[7] == "NRS (Pain during Test)"][
-                8
-            ].values[0]
-            nrs_left = right_col_data[right_col_data[7] == "NRS (Pain during Test)"][
-                8
-            ].values[0]
+            nrs_right = int(
+                right_col_data[right_col_data[7] == "NRS (Pain during Test)"][8].values[
+                    0
+                ]
+            )
+            nrs_left = int(
+                right_col_data[right_col_data[7] == "NRS (Pain during Test)"][8].values[
+                    0
+                ]
+            )
         else:
             if "NRS Right (Pain during Test)" in right_col_data[7].values:
-                nrs_right = right_col_data[
-                    right_col_data[7] == "NRS Right (Pain during Test)"
-                ][8].values[0]
+                nrs_right = int(
+                    right_col_data[right_col_data[7] == "NRS Right (Pain during Test)"][
+                        8
+                    ].values[0]
+                )
             if "NRS Left (Pain during Test)" in right_col_data[7].values:
-                nrs_left = right_col_data[
-                    right_col_data[7] == "NRS Left (Pain during Test)"
-                ][8].values[0]
+                nrs_left = int(
+                    right_col_data[right_col_data[7] == "NRS Left (Pain during Test)"][
+                        8
+                    ].values[0]
+                )
+
         # try:
         #     nrs_right = right_col_data[right_col_data[7] == "NRS (Pain during Test)"][
         #         8
@@ -145,7 +154,6 @@ def flatten_xlsx(path):
                 measure,
                 right_max,
                 nrs_right,
-                nrs_left,
                 id
                 + test
                 + (id + test + "".join(dateid.split(".")))
@@ -173,7 +181,6 @@ def flatten_xlsx(path):
                 "Left",
                 measure,
                 left_max,
-                nrs_right,
                 nrs_left,
                 id
                 + test
@@ -206,7 +213,6 @@ def flatten_xlsx(path):
                 measure,
                 right_max,
                 nrs_right,
-                nrs_left,
                 np.nan,
             ],
             [
@@ -230,15 +236,12 @@ def flatten_xlsx(path):
                 "Left",
                 measure,
                 left_max,
-                nrs_right,
                 nrs_left,
                 np.nan,
             ],
         ]
 
     return x
-
-
 #%%
 def preprocess(uploaded_files):
 
@@ -275,11 +278,11 @@ def preprocess(uploaded_files):
             "leg",
             "measure",
             "strength",
-            "NRS right",
-            "NRS left",
+            "NRS",
             "test_id",
         ],
     )
+    st.write(df)
     df = df.dropna(subset=["strength"])
     df["date"] = pd.to_datetime(df["date"], format="%d.%m.%Y", errors="coerce").fillna(
         np.nan
@@ -321,8 +324,9 @@ def preprocess(uploaded_files):
             "leg",
             "measure",
             "strength",
-            "NRS right",
-            "NRS left",
+            # "NRS right",
+            # "NRS left",
+            "NRS",
             "test_id",
         ]
     ]
