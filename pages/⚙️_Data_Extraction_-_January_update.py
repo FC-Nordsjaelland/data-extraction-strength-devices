@@ -242,6 +242,8 @@ def flatten_xlsx(path):
         ]
 
     return x
+
+
 #%%
 def preprocess(uploaded_files):
 
@@ -282,7 +284,6 @@ def preprocess(uploaded_files):
             "test_id",
         ],
     )
-    st.write(df)
     df = df.dropna(subset=["strength"])
     df["date"] = pd.to_datetime(df["date"], format="%d.%m.%Y", errors="coerce").fillna(
         np.nan
