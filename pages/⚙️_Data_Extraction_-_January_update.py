@@ -25,9 +25,15 @@ def flatten_xlsx(path):
     try:
         data.reset_index()
         metadata = data[[0, 1]]
-        date = metadata[metadata[0] == "Date"][1][0].split()[0]
-        dateid = metadata[metadata[0] == "Date"][1][0]
-        year = metadata[metadata[0] == "Date"][1][0].split()[0].split(".")[-1]
+        try:
+            date = metadata[metadata[0] == "Date"][1][0].split()[0]
+            dateid = metadata[metadata[0] == "Date"][1][0]
+            year = metadata[metadata[0] == "Date"][1][0].split()[0].split(".")[-1]
+        except:
+            date = metadata.iloc[0][1].split()[0]
+            dateid = metadata.iloc[0][1]
+            year = metadata.iloc[0][1].split()[0].split(".")[-1]
+
         test = metadata[metadata[0] == "Exercise"][1].values[0]
         if test == "Isometric":
             test = "Hamstring"
@@ -37,7 +43,39 @@ def flatten_xlsx(path):
 
         right_col_data = data[[4, 5, 6, 7, 8]]
 
-        nrs = right_col_data[right_col_data[7] == "NRS (Pain during Test)"][8].values[0]
+        nrs_right = None
+        nrs_left = None
+        if "NRS (Pain during Test)" in right_col_data[7].values:
+            nrs_right = right_col_data[right_col_data[7] == "NRS (Pain during Test)"][
+                8
+            ].values[0]
+            nrs_left = right_col_data[right_col_data[7] == "NRS (Pain during Test)"][
+                8
+            ].values[0]
+        else:
+            if "NRS Right (Pain during Test)" in right_col_data[7].values:
+                nrs_right = right_col_data[
+                    right_col_data[7] == "NRS Right (Pain during Test)"
+                ][8].values[0]
+            if "NRS Left (Pain during Test)" in right_col_data[7].values:
+                nrs_left = right_col_data[
+                    right_col_data[7] == "NRS Left (Pain during Test)"
+                ][8].values[0]
+        # try:
+        #     nrs_right = right_col_data[right_col_data[7] == "NRS (Pain during Test)"][
+        #         8
+        #     ].values[0]
+        #     nrs_left = right_col_data[right_col_data[7] == "NRS (Pain during Test)"][
+        #         8
+        #     ].values[0]
+        # except:
+        #     nrs_right = right_col_data[
+        #         right_col_data[7] == "NRS Right (Pain during Test)"
+        #     ][8].values[0]
+        #     nrs_left = right_col_data[
+        #         right_col_data[7] == "NRS Left (Pain during Test)"
+        #     ][8].values[0]
+
         season_split = (
             right_col_data[right_col_data[7] == "Season Period"][8].values[0].split()
         )
@@ -106,7 +144,8 @@ def flatten_xlsx(path):
                 "Right",
                 measure,
                 right_max,
-                nrs,
+                nrs_right,
+                nrs_left,
                 id
                 + test
                 + (id + test + "".join(dateid.split(".")))
@@ -134,7 +173,8 @@ def flatten_xlsx(path):
                 "Left",
                 measure,
                 left_max,
-                nrs,
+                nrs_right,
+                nrs_left,
                 id
                 + test
                 + (id + test + "".join(dateid.split(".")))
@@ -165,7 +205,8 @@ def flatten_xlsx(path):
                 "Right",
                 measure,
                 right_max,
-                nrs,
+                nrs_right,
+                nrs_left,
                 np.nan,
             ],
             [
@@ -189,7 +230,8 @@ def flatten_xlsx(path):
                 "Left",
                 measure,
                 left_max,
-                nrs,
+                nrs_right,
+                nrs_left,
                 np.nan,
             ],
         ]
@@ -197,6 +239,7 @@ def flatten_xlsx(path):
     return x
 
 
+#%%
 def preprocess(uploaded_files):
 
     # file_names = glob.glob(os.path.join(dir_path, "*.xlsx"))
@@ -232,7 +275,8 @@ def preprocess(uploaded_files):
             "leg",
             "measure",
             "strength",
-            "NRS",
+            "NRS right",
+            "NRS left",
             "test_id",
         ],
     )
@@ -277,7 +321,8 @@ def preprocess(uploaded_files):
             "leg",
             "measure",
             "strength",
-            "NRS",
+            "NRS right",
+            "NRS left",
             "test_id",
         ]
     ]
@@ -427,6 +472,5 @@ if uploaded_files is not None:
             btn = st.download_button(
                 label="Press to Download", data=img, file_name=fn, mime="image/png"
             )
-
 
 # %%
