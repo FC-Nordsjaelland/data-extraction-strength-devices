@@ -42,7 +42,7 @@ def flatten_xlsx(path):
         name = metadata[metadata[0] == "Name"][1].values[0]
 
         if "_" in name:
-            name = "_".join(name.split("_"))
+            name = " ".join(name.split("_"))
 
         right_col_data = data[[4, 5, 6, 7, 8]]
 
