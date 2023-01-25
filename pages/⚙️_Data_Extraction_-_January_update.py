@@ -41,6 +41,9 @@ def flatten_xlsx(path):
         team = metadata[metadata[0] == "Team"][1].values[0]
         name = metadata[metadata[0] == "Name"][1].values[0]
 
+        if "_" in name:
+            name = "_".join(name.split("_"))
+
         right_col_data = data[[4, 5, 6, 7, 8]]
 
         nrs_right = None
