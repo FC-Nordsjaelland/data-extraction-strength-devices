@@ -48,30 +48,33 @@ def flatten_xlsx(path):
 
         nrs_right = 0
         nrs_left = 0
-        if "NRS (Pain during Test)" in right_col_data[7].values:
-            nrs_right = int(
-                right_col_data[right_col_data[7] == "NRS (Pain during Test)"][8].values[
-                    0
-                ]
-            )
-            nrs_left = int(
-                right_col_data[right_col_data[7] == "NRS (Pain during Test)"][8].values[
-                    0
-                ]
-            )
-        else:
-            if "NRS Right (Pain during Test)" in right_col_data[7].values:
+        try:
+            if "NRS (Pain during Test)" in right_col_data[7].values:
                 nrs_right = int(
-                    right_col_data[right_col_data[7] == "NRS Right (Pain during Test)"][
+                    right_col_data[right_col_data[7] == "NRS (Pain during Test)"][
                         8
                     ].values[0]
                 )
-            if "NRS Left (Pain during Test)" in right_col_data[7].values:
                 nrs_left = int(
-                    right_col_data[right_col_data[7] == "NRS Left (Pain during Test)"][
+                    right_col_data[right_col_data[7] == "NRS (Pain during Test)"][
                         8
                     ].values[0]
                 )
+            else:
+                if "NRS Right (Pain during Test)" in right_col_data[7].values:
+                    nrs_right = int(
+                        right_col_data[
+                            right_col_data[7] == "NRS Right (Pain during Test)"
+                        ][8].values[0]
+                    )
+                if "NRS Left (Pain during Test)" in right_col_data[7].values:
+                    nrs_left = int(
+                        right_col_data[
+                            right_col_data[7] == "NRS Left (Pain during Test)"
+                        ][8].values[0]
+                    )
+        except:
+            pass
 
         # try:
         #     nrs_right = right_col_data[right_col_data[7] == "NRS (Pain during Test)"][
@@ -400,10 +403,7 @@ if uploaded_files is not None:
         st.write("")
         joined_df = df_summary(df)
         AgGrid(joined_df, fit_columns_on_grid_load=True)
-    except:
-        pass
 
-    try:
         csv = convert_df(df)
         st.download_button(
             "Press to Download the full mastersheet version",
@@ -412,73 +412,73 @@ if uploaded_files is not None:
             "text/csv",
             key="download-csv",
         )
+
+        st.write("")
+        st.write("")
+
+        with st.form(key="my_form2"):
+            test = st.radio(
+                "Choose a test to visualize", ("Nordic", "Hamstring", "Isometric")
+            )
+            sorter = st.radio(
+                "Sort the values by", ("Max right", "Max left", "Mean strength")
+            )
+            if sorter == "Max right":
+                joined_df = joined_df.sort_values(by=["Max right"])
+            elif sorter == "Max left":
+                joined_df = joined_df.sort_values(by=["Max left"])
+            elif sorter == "Mean strength":
+                joined_df = joined_df.sort_values(by=["Mean strength"])
+            submitted = st.form_submit_button(label="Visualize")
+
+            if test == "Nordic":
+                joined_df = joined_df[joined_df["Test"] == "Nordic"]
+                title = "Nordic"
+
+            elif test == "Hamstring":
+                joined_df = joined_df[joined_df["Test"] == "Hamstring"]
+                title = "Hamstring"
+
+            elif test == "Isometric":
+                joined_df = joined_df[joined_df["Test"] == "Isometric"]
+                title = "Isometric"
+
+            if len(df["team"].unique()) == 1:
+                uniqueteam = df["team"].unique()[0]
+            else:
+                uniqueteam = ""
+
+            if len(df["date"].unique()) == 1:
+                uniquedate = df["date"].unique()[0]
+            else:
+                uniquedate = ""
+
+        if submitted:
+            ax = joined_df.plot(
+                x="Name", y=["Max left", "Max right"], kind="bar", width=0.6
+            )
+            plt.xticks(rotation=75)
+            plt.xlabel("")
+            plt.ylabel("Strength (Newtons)")
+            plt.rcParams.update({"font.size": 6})
+            joined_df["Percentage difference"] = (
+                joined_df["Percentage difference"].astype(str) + " %"
+            )
+            ax.bar_label(ax.containers[0], joined_df["Percentage difference"])
+
+            plt.legend(fontsize=7)
+            plt.title(title + " test " + uniqueteam + " " + uniquedate)
+
+            st.pyplot(fig=plt)
+
+            plt.subplots_adjust(bottom=0.30)
+            fn = "scatter.png"
+            plt.savefig(fn, dpi=1000)
+            with open(fn, "rb") as img:
+                btn = st.download_button(
+                    label="Press to Download", data=img, file_name=fn, mime="image/png"
+                )
     except:
         pass
-
-    st.write("")
-    st.write("")
-
-    with st.form(key="my_form2"):
-        test = st.radio(
-            "Choose a test to visualize", ("Nordic", "Hamstring", "Isometric")
-        )
-        sorter = st.radio(
-            "Sort the values by", ("Max right", "Max left", "Mean strength")
-        )
-        if sorter == "Max right":
-            joined_df = joined_df.sort_values(by=["Max right"])
-        elif sorter == "Max left":
-            joined_df = joined_df.sort_values(by=["Max left"])
-        elif sorter == "Mean strength":
-            joined_df = joined_df.sort_values(by=["Mean strength"])
-        submitted = st.form_submit_button(label="Visualize")
-
-        if test == "Nordic":
-            joined_df = joined_df[joined_df["Test"] == "Nordic"]
-            title = "Nordic"
-
-        elif test == "Hamstring":
-            joined_df = joined_df[joined_df["Test"] == "Hamstring"]
-            title = "Hamstring"
-
-        elif test == "Isometric":
-            joined_df = joined_df[joined_df["Test"] == "Isometric"]
-            title = "Isometric"
-
-        if len(df["team"].unique()) == 1:
-            uniqueteam = df["team"].unique()[0]
-        else:
-            uniqueteam = ""
-
-        if len(df["date"].unique()) == 1:
-            uniquedate = df["date"].unique()[0]
-        else:
-            uniquedate = ""
-
-    if submitted:
-        ax = joined_df.plot(
-            x="Name", y=["Max left", "Max right"], kind="bar", width=0.6
-        )
-        plt.xticks(rotation=75)
-        plt.xlabel("")
-        plt.ylabel("Strength (Newtons)")
-        plt.rcParams.update({"font.size": 6})
-        joined_df["Percentage difference"] = (
-            joined_df["Percentage difference"].astype(str) + " %"
-        )
-        ax.bar_label(ax.containers[0], joined_df["Percentage difference"])
-
-        plt.legend(fontsize=7)
-        plt.title(title + " test " + uniqueteam + " " + uniquedate)
-
-        st.pyplot(fig=plt)
-
-        plt.subplots_adjust(bottom=0.30)
-        fn = "scatter.png"
-        plt.savefig(fn, dpi=1000)
-        with open(fn, "rb") as img:
-            btn = st.download_button(
-                label="Press to Download", data=img, file_name=fn, mime="image/png"
-            )
 
 # %%
