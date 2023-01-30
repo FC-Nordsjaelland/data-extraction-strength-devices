@@ -46,8 +46,8 @@ def flatten_xlsx(path):
 
         right_col_data = data[[4, 5, 6, 7, 8]]
 
-        nrs_right = None
-        nrs_left = None
+        nrs_right = 0
+        nrs_left = 0
         if "NRS (Pain during Test)" in right_col_data[7].values:
             nrs_right = int(
                 right_col_data[right_col_data[7] == "NRS (Pain during Test)"][8].values[
