@@ -74,7 +74,8 @@ def flatten_xlsx(path):
                         ][8].values[0]
                     )
         except:
-            pass
+            nrs_right = np.nan
+            nrs_left = np.nan
 
         # try:
         #     nrs_right = right_col_data[right_col_data[7] == "NRS (Pain during Test)"][
