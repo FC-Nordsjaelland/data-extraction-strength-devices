@@ -77,21 +77,6 @@ def flatten_xlsx(path):
             nrs_right = np.nan
             nrs_left = np.nan
 
-        # try:
-        #     nrs_right = right_col_data[right_col_data[7] == "NRS (Pain during Test)"][
-        #         8
-        #     ].values[0]
-        #     nrs_left = right_col_data[right_col_data[7] == "NRS (Pain during Test)"][
-        #         8
-        #     ].values[0]
-        # except:
-        #     nrs_right = right_col_data[
-        #         right_col_data[7] == "NRS Right (Pain during Test)"
-        #     ][8].values[0]
-        #     nrs_left = right_col_data[
-        #         right_col_data[7] == "NRS Left (Pain during Test)"
-        #     ][8].values[0]
-
         season_split = (
             right_col_data[right_col_data[7] == "Season Period"][8].values[0].split()
         )
@@ -138,6 +123,22 @@ def flatten_xlsx(path):
             left_max = np.nan
             right_max = np.nan
 
+        software_specs = data[[11, 12]]
+        try:
+            forcemate_version = software_specs[
+                software_specs[11] == "ForceMate version"
+            ][12].values[0]
+            firmware_version = software_specs[software_specs[11] == "Firmware version"][
+                12
+            ].values[0]
+            hz = software_specs[software_specs[11] == "Hz"][12].values[0]
+            measure = software_specs[software_specs[11] == "Unit"][12].values[0]
+        except:
+            forcemate_version = np.nan
+            firmware_version = np.nan
+            hz = np.nan
+            measure = "Newtons"
+
         x = [
             [
                 name,
@@ -166,6 +167,9 @@ def flatten_xlsx(path):
                 + (id + test + "".join(dateid.split(".")))
                 .replace(" ", "")
                 .replace(":", ""),
+                forcemate_version,
+                firmware_version,
+                hz,
             ],
             [
                 name,
@@ -194,6 +198,9 @@ def flatten_xlsx(path):
                 + (id + test + "".join(dateid.split(".")))
                 .replace(" ", "")
                 .replace(":", ""),
+                forcemate_version,
+                firmware_version,
+                hz,
             ],
         ]
     except:
@@ -221,6 +228,9 @@ def flatten_xlsx(path):
                 right_max,
                 nrs_right,
                 np.nan,
+                forcemate_version,
+                firmware_version,
+                hz,
             ],
             [
                 name,
@@ -245,6 +255,9 @@ def flatten_xlsx(path):
                 left_max,
                 nrs_left,
                 np.nan,
+                forcemate_version,
+                firmware_version,
+                hz,
             ],
         ]
 
@@ -289,6 +302,9 @@ def preprocess(uploaded_files):
             "strength",
             "NRS",
             "test_id",
+            "forcemate_version",
+            "firmware_version",
+            "hz",
         ],
     )
     df = df.dropna(subset=["strength"])
@@ -336,6 +352,9 @@ def preprocess(uploaded_files):
             # "NRS left",
             "NRS",
             "test_id",
+            "forcemate_version",
+            "firmware_version",
+            "hz",
         ]
     ]
     return final_df
