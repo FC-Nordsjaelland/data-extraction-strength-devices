@@ -123,8 +123,8 @@ def flatten_xlsx(path):
             left_max = np.nan
             right_max = np.nan
 
-        software_specs = data[[11, 12]]
         try:
+            software_specs = data[[11, 12]]
             forcemate_version = software_specs[
                 software_specs[11] == "ForceMate version"
             ][12].values[0]
@@ -230,9 +230,9 @@ def flatten_xlsx(path):
                 right_max,
                 nrs_right,
                 np.nan,
-                forcemate_version,
-                firmware_version,
-                hz,
+                np.nan,
+                np.nan,
+                np.nan,
             ],
             [
                 name,
@@ -257,9 +257,9 @@ def flatten_xlsx(path):
                 left_max,
                 nrs_left,
                 np.nan,
-                forcemate_version,
-                firmware_version,
-                hz,
+                np.nan,
+                np.nan,
+                np.nan,
             ],
         ]
 
