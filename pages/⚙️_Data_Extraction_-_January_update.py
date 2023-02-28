@@ -133,6 +133,8 @@ def flatten_xlsx(path):
             ].values[0]
             hz = software_specs[software_specs[11] == "Hz"][12].values[0]
             measure = software_specs[software_specs[11] == "Unit"][12].values[0]
+            if measure == "N":
+                measure = "Newtons"
         except:
             forcemate_version = np.nan
             firmware_version = np.nan
