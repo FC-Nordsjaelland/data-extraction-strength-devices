@@ -8,6 +8,7 @@ import streamlit as st
 from st_aggrid import AgGrid
 import numpy as np
 import seaborn as sns
+import math
 
 #%%
 st.set_page_config(page_title="Strength data summary", layout="wide")
@@ -73,6 +74,14 @@ def flatten_xlsx(path):
                             right_col_data[7] == "NRS Left (Pain during Test)"
                         ][8].values[0]
                     )
+                if "NRS (R)" in right_col_data[7].values:
+                    nrs_right = int(
+                        right_col_data[right_col_data[7] == "NRS (R)"][8].values[0]
+                    )
+                if "NRS (L)" in right_col_data[7].values:
+                    nrs_left = int(
+                        right_col_data[right_col_data[7] == "NRS (L)"][8].values[0]
+                    )
         except:
             nrs_right = np.nan
             nrs_left = np.nan
@@ -90,6 +99,13 @@ def flatten_xlsx(path):
             gender = right_col_data[right_col_data[4] == "Gender"][5].values[0]
             height = right_col_data[right_col_data[4] == "Height"][5].values[0]
             weight = right_col_data[right_col_data[4] == "Weight"][5].values[0]
+            if (
+                "Weight" in right_col_data[7].values
+                and float(right_col_data[right_col_data[7] == "Weight"][8].values[0])
+                > 0
+            ):
+                weight = right_col_data[right_col_data[7] == "Weight"][8].values[0]
+                print(weight)
             position = right_col_data[right_col_data[4] == "Position"][5].values[0]
             id = right_col_data[right_col_data[4] == "ID"][5].values[0]
         except:
@@ -141,6 +157,17 @@ def flatten_xlsx(path):
             hz = np.nan
             measure = "Newtons"
 
+        try:
+            nrs_prev_left = right_col_data[right_col_data[7] == "NRS Previous wk (L)"][
+                8
+            ].values[0]
+            nrs_prev_right = right_col_data[right_col_data[7] == "NRS Previous wk (R)"][
+                8
+            ].values[0]
+        except:
+            nrs_prev_left = np.nan
+            nrs_prev_right = np.nan
+
         x = [
             [
                 name,
@@ -164,6 +191,7 @@ def flatten_xlsx(path):
                 measure,
                 right_max,
                 nrs_right,
+                nrs_prev_right,
                 id
                 + test
                 + (id + test + "".join(dateid.split(".")))
@@ -195,6 +223,7 @@ def flatten_xlsx(path):
                 measure,
                 left_max,
                 nrs_left,
+                nrs_prev_left,
                 id
                 + test
                 + (id + test + "".join(dateid.split(".")))
@@ -229,6 +258,7 @@ def flatten_xlsx(path):
                 measure,
                 right_max,
                 nrs_right,
+                nrs_prev_right,
                 np.nan,
                 np.nan,
                 np.nan,
@@ -256,6 +286,7 @@ def flatten_xlsx(path):
                 measure,
                 left_max,
                 nrs_left,
+                nrs_prev_left,
                 np.nan,
                 np.nan,
                 np.nan,
@@ -303,12 +334,14 @@ def preprocess(uploaded_files):
             "measure",
             "strength",
             "NRS",
+            "NRS previous",
             "test_id",
             "forcemate_version",
             "firmware_version",
             "hz",
         ],
     )
+
     df = df.dropna(subset=["strength"])
     df["date"] = pd.to_datetime(df["date"], format="%d.%m.%Y", errors="coerce").fillna(
         np.nan
@@ -502,5 +535,3 @@ if uploaded_files is not None:
                 )
     except:
         pass
-
-# %%
