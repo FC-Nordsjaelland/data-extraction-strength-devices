@@ -386,6 +386,7 @@ def preprocess(uploaded_files):
             # "NRS right",
             # "NRS left",
             "NRS",
+            "NRS previous",
             "test_id",
             "forcemate_version",
             "firmware_version",
