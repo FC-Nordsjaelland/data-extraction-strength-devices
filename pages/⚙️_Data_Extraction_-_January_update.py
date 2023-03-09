@@ -105,7 +105,7 @@ def flatten_xlsx(path):
                 > 0
             ):
                 weight = right_col_data[right_col_data[7] == "Weight"][8].values[0]
-                print(weight)
+                # print(weight)
             position = right_col_data[right_col_data[4] == "Position"][5].values[0]
             id = right_col_data[right_col_data[4] == "ID"][5].values[0]
         except:
