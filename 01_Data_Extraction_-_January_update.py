@@ -367,6 +367,13 @@ def flatten_xlsx(path):
     ):
         weight = right_col_data[right_col_data[7] == "Weight"][8].values[0]
 
+    # in case the weight field is called bodymass
+    if (
+        "Bodymass" in right_col_data[7].values
+        and float(right_col_data[right_col_data[7] == "Bodymass"][8].values[0]) > 0
+    ):
+        weight = right_col_data[right_col_data[7] == "Bodymass"][8].values[0]
+
     position = right_col_data[right_col_data[4] == "Position"][5].values[0]
     id = right_col_data[right_col_data[4] == "ID"][5].values[0]
 
