@@ -21,278 +21,454 @@ def percentage_difference(col1, col2):
     return abs(col1 - col2) / ((col1 + col2) / 2) * 100
 
 
+# def flatten_xlsx(path):
+#     data = pd.read_excel(path, header=None)
+#     try:
+#         data.reset_index()
+#         metadata = data[[0, 1]]
+#         try:
+#             date = metadata[metadata[0] == "Date"][1][0].split()[0]
+#             dateid = metadata[metadata[0] == "Date"][1][0]
+#             year = metadata[metadata[0] == "Date"][1][0].split()[0].split(".")[-1]
+#         except:
+#             date = metadata.iloc[0][1].split()[0]
+#             dateid = metadata.iloc[0][1]
+#             year = metadata.iloc[0][1].split()[0].split(".")[-1]
+
+#         test = metadata[metadata[0] == "Exercise"][1].values[0]
+#         if test == "Isometric":
+#             test = "Hamstring"
+#         measure = "Newtons"
+#         team = metadata[metadata[0] == "Team"][1].values[0]
+#         name = metadata[metadata[0] == "Name"][1].values[0]
+
+#         if "_" in name:
+#             name = " ".join(name.split("_"))
+
+#         right_col_data = data[[4, 5, 6, 7, 8]]
+
+#         nrs_right = 0
+#         nrs_left = 0
+#         try:
+#             if "NRS (Pain during Test)" in right_col_data[7].values:
+#                 nrs_right = int(
+#                     right_col_data[right_col_data[7] == "NRS (Pain during Test)"][
+#                         8
+#                     ].values[0]
+#                 )
+#                 nrs_left = int(
+#                     right_col_data[right_col_data[7] == "NRS (Pain during Test)"][
+#                         8
+#                     ].values[0]
+#                 )
+#             else:
+#                 if "NRS Right (Pain during Test)" in right_col_data[7].values:
+#                     nrs_right = int(
+#                         right_col_data[
+#                             right_col_data[7] == "NRS Right (Pain during Test)"
+#                         ][8].values[0]
+#                     )
+#                 if "NRS Left (Pain during Test)" in right_col_data[7].values:
+#                     nrs_left = int(
+#                         right_col_data[
+#                             right_col_data[7] == "NRS Left (Pain during Test)"
+#                         ][8].values[0]
+#                     )
+#                 if "NRS (R)" in right_col_data[7].values:
+#                     nrs_right = int(
+#                         right_col_data[right_col_data[7] == "NRS (R)"][8].values[0]
+#                     )
+#                 if "NRS (L)" in right_col_data[7].values:
+#                     nrs_left = int(
+#                         right_col_data[right_col_data[7] == "NRS (L)"][8].values[0]
+#                     )
+#         except:
+#             nrs_right = np.nan
+#             nrs_left = np.nan
+
+#         season_split = (
+#             right_col_data[right_col_data[7] == "Season Period"][8].values[0].split()
+#         )
+#         term = season_split[1]
+#         season_period = season_split[0]
+#         test_type = right_col_data[right_col_data[7] == "Test Type"][8].values[0]
+#         try:
+#             dob = right_col_data[right_col_data[4] == "Date of birth (dd/mm/yyyy)"][
+#                 5
+#             ].values[0]
+#             gender = right_col_data[right_col_data[4] == "Gender"][5].values[0]
+#             height = right_col_data[right_col_data[4] == "Height"][5].values[0]
+#             weight = right_col_data[right_col_data[4] == "Weight"][5].values[0]
+#             if (
+#                 "Weight" in right_col_data[7].values
+#                 and float(right_col_data[right_col_data[7] == "Weight"][8].values[0])
+#                 > 0
+#             ):
+#                 weight = right_col_data[right_col_data[7] == "Weight"][8].values[0]
+#                 # print(weight)
+#             position = right_col_data[right_col_data[4] == "Position"][5].values[0]
+#             id = right_col_data[right_col_data[4] == "ID"][5].values[0]
+#         except:
+#             dob, gender, height, weight, position, id = (
+#                 np.nan,
+#                 np.nan,
+#                 np.nan,
+#                 np.nan,
+#                 np.nan,
+#                 np.nan,
+#             )
+
+#         try:
+#             lever_knee = right_col_data[right_col_data[4] == "Hip-Knee Lever"][
+#                 5
+#             ].values[0]
+#             lever_groin = right_col_data[right_col_data[4] == "Hip-Ankle Lever"][
+#                 5
+#             ].values[0]
+#         except:
+#             lever_knee = np.nan
+#             lever_groin = np.nan
+
+#         try:
+#             tests = data[[1, 2]][7::]
+#             tests.columns = ["Left", "Right"]
+#             tests = tests.astype("float")
+#             left_max = tests["Left"].max()
+#             right_max = tests["Right"].max()
+#         except:
+#             left_max = np.nan
+#             right_max = np.nan
+
+#         try:
+#             software_specs = data[[11, 12]]
+#             forcemate_version = software_specs[
+#                 software_specs[11] == "ForceMate version"
+#             ][12].values[0]
+#             firmware_version = software_specs[software_specs[11] == "Firmware version"][
+#                 12
+#             ].values[0]
+#             hz = software_specs[software_specs[11] == "Hz"][12].values[0]
+#             measure = software_specs[software_specs[11] == "Unit"][12].values[0]
+#             if measure == "N":
+#                 measure = "Newtons"
+#         except:
+#             forcemate_version = np.nan
+#             firmware_version = np.nan
+#             hz = np.nan
+#             measure = "Newtons"
+
+#         try:
+#             nrs_prev_left = right_col_data[right_col_data[7] == "NRS Previous wk (L)"][
+#                 8
+#             ].values[0]
+#             nrs_prev_right = right_col_data[right_col_data[7] == "NRS Previous wk (R)"][
+#                 8
+#             ].values[0]
+#         except:
+#             nrs_prev_left = np.nan
+#             nrs_prev_right = np.nan
+
+#         x = [
+#             [
+#                 name,
+#                 id,
+#                 gender,
+#                 dob,
+#                 np.nan,
+#                 height,
+#                 weight,
+#                 lever_knee,
+#                 lever_groin,
+#                 team,
+#                 position,
+#                 date,
+#                 year,
+#                 term,
+#                 season_period,
+#                 test_type,
+#                 test,
+#                 "Right",
+#                 measure,
+#                 right_max,
+#                 nrs_right,
+#                 nrs_prev_right,
+#                 id
+#                 + test
+#                 + (id + test + "".join(dateid.split(".")))
+#                 .replace(" ", "")
+#                 .replace(":", ""),
+#                 forcemate_version,
+#                 firmware_version,
+#                 hz,
+#             ],
+#             [
+#                 name,
+#                 id,
+#                 gender,
+#                 dob,
+#                 np.nan,
+#                 height,
+#                 weight,
+#                 lever_knee,
+#                 lever_groin,
+#                 team,
+#                 position,
+#                 date,
+#                 year,
+#                 term,
+#                 season_period,
+#                 test_type,
+#                 test,
+#                 "Left",
+#                 measure,
+#                 left_max,
+#                 nrs_left,
+#                 nrs_prev_left,
+#                 id
+#                 + test
+#                 + (id + test + "".join(dateid.split(".")))
+#                 .replace(" ", "")
+#                 .replace(":", ""),
+#                 forcemate_version,
+#                 firmware_version,
+#                 hz,
+#             ],
+#         ]
+#     except:
+#         x = [
+#             [
+#                 name,
+#                 np.nan,
+#                 np.nan,
+#                 np.nan,
+#                 np.nan,
+#                 np.nan,
+#                 np.nan,
+#                 np.nan,
+#                 np.nan,
+#                 team,
+#                 np.nan,
+#                 date,
+#                 year,
+#                 term,
+#                 season_period,
+#                 test_type,
+#                 test,
+#                 "Right",
+#                 measure,
+#                 right_max,
+#                 nrs_right,
+#                 nrs_prev_right,
+#                 np.nan,
+#                 np.nan,
+#                 np.nan,
+#                 np.nan,
+#             ],
+#             [
+#                 name,
+#                 np.nan,
+#                 np.nan,
+#                 np.nan,
+#                 np.nan,
+#                 np.nan,
+#                 np.nan,
+#                 np.nan,
+#                 np.nan,
+#                 team,
+#                 np.nan,
+#                 date,
+#                 year,
+#                 term,
+#                 season_period,
+#                 test_type,
+#                 test,
+#                 "Left",
+#                 measure,
+#                 left_max,
+#                 nrs_left,
+#                 nrs_prev_left,
+#                 np.nan,
+#                 np.nan,
+#                 np.nan,
+#                 np.nan,
+#             ],
+#         ]
+
+#     return x
+
+
 def flatten_xlsx(path):
     data = pd.read_excel(path, header=None)
+    data.reset_index()
+
+    # extract metadata
+    metadata = data[[0, 1]].copy()
+    date = metadata[metadata[0] == "Date"][1][0].split()[0]
+    dateid = metadata[metadata[0] == "Date"][1][0]
+    year = metadata[metadata[0] == "Date"][1][0].split()[0].split(".")[-1]
+    test = metadata[metadata[0] == "Exercise"][1].values[0]
+    if test == "Isometric":
+        test = "Hamstring"
+
+    measure = "Newtons"
+    team = metadata[metadata[0] == "Team"][1].values[0]
+    name = metadata[metadata[0] == "Name"][1].values[0]
+
+    # handling names separated by _
+    if "_" in name:
+        name = " ".join(name.split("_"))
+
+    # extract test results
+    test_results = data[[1, 2]][7::].copy()
+    test_results.columns = ["Left", "Right"]
+    tests = test_results.astype("float")
+    left_max = tests["Left"].max()
+    right_max = tests["Right"].max()
+
+    # extract player and test information
+    right_col_data = data[[4, 5, 6, 7, 8]].copy()
+
+    # different possible NRS names (fx. NRS (R), NRS Right, NRS Right (Pain during Test))
+    nrs_vals = []
+    for val in right_col_data[7].values:
+        if type(val) == str and val.startswith("NRS"):
+            nrs_vals.append(right_col_data[right_col_data[7] == val][8].values[0])
+
+    if len(nrs_vals) == 2:
+        nrs_right = nrs_vals[0]
+        nrs_left = nrs_vals[1]
+        nrs_prev_right = np.nan
+        nrs_prev_left = np.nan
+    elif len(nrs_vals) == 4:
+        nrs_right = nrs_vals[0]
+        nrs_left = nrs_vals[1]
+        nrs_prev_right = nrs_vals[2]
+        nrs_prev_left = nrs_vals[3]
+
+    season_data = right_col_data[right_col_data[7] == "Season Period"][8]
+    if not season_data.isna:
+        season_split = season_data.values[0].split()
+    else:
+        season_split = [np.nan, np.nan]
+
+    term = season_split[1]
+    season_period = season_split[0]
+    test_type = right_col_data[right_col_data[7] == "Test Type"][8].values[0]
+
+    dob = right_col_data[right_col_data[4] == "Date of birth (dd/mm/yyyy)"][5].values[0]
+    gender = right_col_data[right_col_data[4] == "Gender"][5].values[0]
+    height = right_col_data[right_col_data[4] == "Height"][5].values[0]
+    weight = right_col_data[right_col_data[4] == "Weight"][5].values[0]
+
+    # if there's a value for weight under custom fields, it should replace the other one
+    if (
+        "Weight" in right_col_data[7].values
+        and float(right_col_data[right_col_data[7] == "Weight"][8].values[0]) > 0
+    ):
+        weight = right_col_data[right_col_data[7] == "Weight"][8].values[0]
+
+    position = right_col_data[right_col_data[4] == "Position"][5].values[0]
+    id = right_col_data[right_col_data[4] == "ID"][5].values[0]
+
+    lever_knee = right_col_data[right_col_data[4] == "Hip-Knee Lever"][5].values[0]
+    lever_groin = right_col_data[right_col_data[4] == "Hip-Ankle Lever"][5].values[0]
+
+    # extracting software specs
     try:
-        data.reset_index()
-        metadata = data[[0, 1]]
-        try:
-            date = metadata[metadata[0] == "Date"][1][0].split()[0]
-            dateid = metadata[metadata[0] == "Date"][1][0]
-            year = metadata[metadata[0] == "Date"][1][0].split()[0].split(".")[-1]
-        except:
-            date = metadata.iloc[0][1].split()[0]
-            dateid = metadata.iloc[0][1]
-            year = metadata.iloc[0][1].split()[0].split(".")[-1]
-
-        test = metadata[metadata[0] == "Exercise"][1].values[0]
-        if test == "Isometric":
-            test = "Hamstring"
-        measure = "Newtons"
-        team = metadata[metadata[0] == "Team"][1].values[0]
-        name = metadata[metadata[0] == "Name"][1].values[0]
-
-        if "_" in name:
-            name = " ".join(name.split("_"))
-
-        right_col_data = data[[4, 5, 6, 7, 8]]
-
-        nrs_right = 0
-        nrs_left = 0
-        try:
-            if "NRS (Pain during Test)" in right_col_data[7].values:
-                nrs_right = int(
-                    right_col_data[right_col_data[7] == "NRS (Pain during Test)"][
-                        8
-                    ].values[0]
-                )
-                nrs_left = int(
-                    right_col_data[right_col_data[7] == "NRS (Pain during Test)"][
-                        8
-                    ].values[0]
-                )
-            else:
-                if "NRS Right (Pain during Test)" in right_col_data[7].values:
-                    nrs_right = int(
-                        right_col_data[
-                            right_col_data[7] == "NRS Right (Pain during Test)"
-                        ][8].values[0]
-                    )
-                if "NRS Left (Pain during Test)" in right_col_data[7].values:
-                    nrs_left = int(
-                        right_col_data[
-                            right_col_data[7] == "NRS Left (Pain during Test)"
-                        ][8].values[0]
-                    )
-                if "NRS (R)" in right_col_data[7].values:
-                    nrs_right = int(
-                        right_col_data[right_col_data[7] == "NRS (R)"][8].values[0]
-                    )
-                if "NRS (L)" in right_col_data[7].values:
-                    nrs_left = int(
-                        right_col_data[right_col_data[7] == "NRS (L)"][8].values[0]
-                    )
-        except:
-            nrs_right = np.nan
-            nrs_left = np.nan
-
-        season_split = (
-            right_col_data[right_col_data[7] == "Season Period"][8].values[0].split()
-        )
-        term = season_split[1]
-        season_period = season_split[0]
-        test_type = right_col_data[right_col_data[7] == "Test Type"][8].values[0]
-        try:
-            dob = right_col_data[right_col_data[4] == "Date of birth (dd/mm/yyyy)"][
-                5
-            ].values[0]
-            gender = right_col_data[right_col_data[4] == "Gender"][5].values[0]
-            height = right_col_data[right_col_data[4] == "Height"][5].values[0]
-            weight = right_col_data[right_col_data[4] == "Weight"][5].values[0]
-            if (
-                "Weight" in right_col_data[7].values
-                and float(right_col_data[right_col_data[7] == "Weight"][8].values[0])
-                > 0
-            ):
-                weight = right_col_data[right_col_data[7] == "Weight"][8].values[0]
-                # print(weight)
-            position = right_col_data[right_col_data[4] == "Position"][5].values[0]
-            id = right_col_data[right_col_data[4] == "ID"][5].values[0]
-        except:
-            dob, gender, height, weight, position, id = (
-                np.nan,
-                np.nan,
-                np.nan,
-                np.nan,
-                np.nan,
-                np.nan,
-            )
-
-        try:
-            lever_knee = right_col_data[right_col_data[4] == "Hip-Knee Lever"][
-                5
-            ].values[0]
-            lever_groin = right_col_data[right_col_data[4] == "Hip-Ankle Lever"][
-                5
-            ].values[0]
-        except:
-            lever_knee = np.nan
-            lever_groin = np.nan
-
-        try:
-            tests = data[[1, 2]][7::]
-            tests.columns = ["Left", "Right"]
-            tests = tests.astype("float")
-            left_max = tests["Left"].max()
-            right_max = tests["Right"].max()
-        except:
-            left_max = np.nan
-            right_max = np.nan
-
-        try:
-            software_specs = data[[11, 12]]
-            forcemate_version = software_specs[
-                software_specs[11] == "ForceMate version"
-            ][12].values[0]
-            firmware_version = software_specs[software_specs[11] == "Firmware version"][
-                12
-            ].values[0]
-            hz = software_specs[software_specs[11] == "Hz"][12].values[0]
-            measure = software_specs[software_specs[11] == "Unit"][12].values[0]
-            if measure == "N":
-                measure = "Newtons"
-        except:
-            forcemate_version = np.nan
-            firmware_version = np.nan
-            hz = np.nan
+        software_specs = data[[11, 12]]
+        forcemate_version = software_specs[software_specs[11] == "ForceMate version"][
+            12
+        ].values[0]
+        firmware_version = software_specs[software_specs[11] == "Firmware version"][
+            12
+        ].values[0]
+        hz = software_specs[software_specs[11] == "Hz"][12].values[0]
+        measure = software_specs[software_specs[11] == "Unit"][12].values[0]
+        if measure == "N":
             measure = "Newtons"
-
-        try:
-            nrs_prev_left = right_col_data[right_col_data[7] == "NRS Previous wk (L)"][
-                8
-            ].values[0]
-            nrs_prev_right = right_col_data[right_col_data[7] == "NRS Previous wk (R)"][
-                8
-            ].values[0]
-        except:
-            nrs_prev_left = np.nan
-            nrs_prev_right = np.nan
-
-        x = [
-            [
-                name,
-                id,
-                gender,
-                dob,
-                np.nan,
-                height,
-                weight,
-                lever_knee,
-                lever_groin,
-                team,
-                position,
-                date,
-                year,
-                term,
-                season_period,
-                test_type,
-                test,
-                "Right",
-                measure,
-                right_max,
-                nrs_right,
-                nrs_prev_right,
-                id
-                + test
-                + (id + test + "".join(dateid.split(".")))
-                .replace(" ", "")
-                .replace(":", ""),
-                forcemate_version,
-                firmware_version,
-                hz,
-            ],
-            [
-                name,
-                id,
-                gender,
-                dob,
-                np.nan,
-                height,
-                weight,
-                lever_knee,
-                lever_groin,
-                team,
-                position,
-                date,
-                year,
-                term,
-                season_period,
-                test_type,
-                test,
-                "Left",
-                measure,
-                left_max,
-                nrs_left,
-                nrs_prev_left,
-                id
-                + test
-                + (id + test + "".join(dateid.split(".")))
-                .replace(" ", "")
-                .replace(":", ""),
-                forcemate_version,
-                firmware_version,
-                hz,
-            ],
-        ]
     except:
-        x = [
-            [
-                name,
-                np.nan,
-                np.nan,
-                np.nan,
-                np.nan,
-                np.nan,
-                np.nan,
-                np.nan,
-                np.nan,
-                team,
-                np.nan,
-                date,
-                year,
-                term,
-                season_period,
-                test_type,
-                test,
-                "Right",
-                measure,
-                right_max,
-                nrs_right,
-                nrs_prev_right,
-                np.nan,
-                np.nan,
-                np.nan,
-                np.nan,
-            ],
-            [
-                name,
-                np.nan,
-                np.nan,
-                np.nan,
-                np.nan,
-                np.nan,
-                np.nan,
-                np.nan,
-                np.nan,
-                team,
-                np.nan,
-                date,
-                year,
-                term,
-                season_period,
-                test_type,
-                test,
-                "Left",
-                measure,
-                left_max,
-                nrs_left,
-                nrs_prev_left,
-                np.nan,
-                np.nan,
-                np.nan,
-                np.nan,
-            ],
-        ]
+        forcemate_version = np.nan
+        firmware_version = np.nan
+        hz = np.nan
+        measure = "Newtons"
+
+    # try:
+    #     nrs_prev_left = right_col_data[right_col_data[7] == "NRS Previous wk (L)"][
+    #         8
+    #     ].values[0]
+    #     nrs_prev_right = right_col_data[right_col_data[7] == "NRS Previous wk (R)"][
+    #         8
+    #     ].values[0]
+    # except:
+    #     nrs_prev_left = np.nan
+    #     nrs_prev_right = np.nan
+
+    x = [
+        [
+            name,
+            id,
+            gender,
+            dob,
+            np.nan,
+            height,
+            weight,
+            lever_knee,
+            lever_groin,
+            team,
+            position,
+            date,
+            year,
+            term,
+            season_period,
+            test_type,
+            test,
+            "Right",
+            measure,
+            right_max,
+            nrs_right,
+            nrs_prev_right,
+            id
+            + test
+            + (id + test + "".join(dateid.split(".")))
+            .replace(" ", "")
+            .replace(":", ""),
+            forcemate_version,
+            firmware_version,
+            hz,
+        ],
+        [
+            name,
+            id,
+            gender,
+            dob,
+            np.nan,
+            height,
+            weight,
+            lever_knee,
+            lever_groin,
+            team,
+            position,
+            date,
+            year,
+            term,
+            season_period,
+            test_type,
+            test,
+            "Left",
+            measure,
+            left_max,
+            nrs_left,
+            nrs_prev_left,
+            id
+            + test
+            + (id + test + "".join(dateid.split(".")))
+            .replace(" ", "")
+            .replace(":", ""),
+            forcemate_version,
+            firmware_version,
+            hz,
+        ],
+    ]
 
     return x
 
@@ -383,8 +559,6 @@ def preprocess(uploaded_files):
             "leg",
             "measure",
             "strength",
-            # "NRS right",
-            # "NRS left",
             "NRS",
             "NRS previous",
             "test_id",
@@ -474,7 +648,7 @@ if uploaded_files is not None:
 
         with st.form(key="my_form2"):
             test = st.radio(
-                "Choose a test to visualize", ("Nordic", "Hamstring", "Isometric")
+                "Choose a test to visualize", ("Nordic", "Hamstring", "Adduction")
             )
             sorter = st.radio(
                 "Sort the values by", ("Max right", "Max left", "Mean strength")
@@ -495,9 +669,9 @@ if uploaded_files is not None:
                 joined_df = joined_df[joined_df["Test"] == "Hamstring"]
                 title = "Hamstring"
 
-            elif test == "Isometric":
-                joined_df = joined_df[joined_df["Test"] == "Isometric"]
-                title = "Isometric"
+            elif test == "Adduction":
+                joined_df = joined_df[joined_df["Test"] == "Adduction"]
+                title = "Adduction"
 
             if len(df["team"].unique()) == 1:
                 uniqueteam = df["team"].unique()[0]
