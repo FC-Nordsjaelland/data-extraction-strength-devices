@@ -346,9 +346,9 @@ def flatten_xlsx(path):
         nrs_prev_left = nrs_vals[3]
 
     season_data = right_col_data[right_col_data[7] == "Season Period"][8]
-    if not season_data.isna:
+    try:
         season_split = season_data.values[0].split()
-    else:
+    except:
         season_split = [np.nan, np.nan]
 
     term = season_split[1]
