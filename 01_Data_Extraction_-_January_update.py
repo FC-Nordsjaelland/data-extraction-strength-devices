@@ -328,32 +328,41 @@ def flatten_xlsx(path):
     # extract player and test information
     right_col_data = data[[4, 5, 6, 7, 8]].copy()
 
-    # different possible NRS names (fx. NRS (R), NRS Right, NRS Right (Pain during Test))
-    nrs_vals = []
-    for val in right_col_data[7].values:
-        if type(val) == str and val.startswith("NRS"):
-            nrs_vals.append(right_col_data[right_col_data[7] == val][8].values[0])
+    try:
+        # different possible NRS names (fx. NRS (R), NRS Right, NRS Right (Pain during Test))
+        nrs_vals = []
+        for val in right_col_data[7].values:
+            if type(val) == str and val.startswith("NRS"):
+                nrs_vals.append(right_col_data[right_col_data[7] == val][8].values[0])
 
-    if len(nrs_vals) == 2:
-        nrs_right = nrs_vals[0]
-        nrs_left = nrs_vals[1]
+        if len(nrs_vals) == 2:
+            nrs_right = nrs_vals[0]
+            nrs_left = nrs_vals[1]
+            nrs_prev_right = np.nan
+            nrs_prev_left = np.nan
+        elif len(nrs_vals) == 4:
+            nrs_right = nrs_vals[0]
+            nrs_left = nrs_vals[1]
+            nrs_prev_right = nrs_vals[2]
+            nrs_prev_left = nrs_vals[3]
+
+        season_data = right_col_data[right_col_data[7] == "Season Period"][8]
+        try:
+            season_split = season_data.values[0].split()
+        except:
+            season_split = [np.nan, np.nan]
+
+        term = season_split[1]
+        season_period = season_split[0]
+        test_type = right_col_data[right_col_data[7] == "Test Type"][8].values[0]
+    except:
+        nrs_right = np.nan
+        nrs_left = np.nan
         nrs_prev_right = np.nan
         nrs_prev_left = np.nan
-    elif len(nrs_vals) == 4:
-        nrs_right = nrs_vals[0]
-        nrs_left = nrs_vals[1]
-        nrs_prev_right = nrs_vals[2]
-        nrs_prev_left = nrs_vals[3]
-
-    season_data = right_col_data[right_col_data[7] == "Season Period"][8]
-    try:
-        season_split = season_data.values[0].split()
-    except:
-        season_split = [np.nan, np.nan]
-
-    term = season_split[1]
-    season_period = season_split[0]
-    test_type = right_col_data[right_col_data[7] == "Test Type"][8].values[0]
+        term = np.nan
+        season_period = np.nan
+        test_type = np.nan
 
     # right_col_data[4] = [
     #     None,  # player attributes
