@@ -355,30 +355,57 @@ def flatten_xlsx(path):
     season_period = season_split[0]
     test_type = right_col_data[right_col_data[7] == "Test Type"][8].values[0]
 
-    dob = right_col_data[right_col_data[4] == "Date of birth (dd/mm/yyyy)"][5].values[0]
-    gender = right_col_data[right_col_data[4] == "Gender"][5].values[0]
-    height = right_col_data[right_col_data[4] == "Height"][5].values[0]
-    weight = right_col_data[right_col_data[4] == "Weight"][5].values[0]
+    # right_col_data[4] = [
+    #     None,  # player attributes
+    #     "Date of birth (dd/mm/yyyy)",
+    #     "Gender",
+    #     "Height",
+    #     "Weight",
+    #     "Position",
+    #     "ID",
+    #     "Hip-Knee Lever",
+    #     "Hip-Ankle Lever",
+    # ] + [None] * (len(data) - 9)
 
-    # if there's a value for weight under custom fields, it should replace the other one
-    if (
-        "Weight" in right_col_data[7].values
-        and float(right_col_data[right_col_data[7] == "Weight"][8].values[0]) > 0
-    ):
-        weight = right_col_data[right_col_data[7] == "Weight"][8].values[0]
+    try:
+        # st.write(right_col_data)
+        dob = right_col_data[right_col_data[4] == "Date of birth (dd/mm/yyyy)"][
+            5
+        ].values[0]
+        gender = right_col_data[right_col_data[4] == "Gender"][5].values[0]
+        height = right_col_data[right_col_data[4] == "Height"][5].values[0]
+        weight = right_col_data[right_col_data[4] == "Weight"][5].values[0]
 
-    # in case the weight field is called bodymass
-    if (
-        "Bodymass" in right_col_data[7].values
-        and float(right_col_data[right_col_data[7] == "Bodymass"][8].values[0]) > 0
-    ):
-        weight = right_col_data[right_col_data[7] == "Bodymass"][8].values[0]
+        # if there's a value for weight under custom fields, it should replace the other one
+        if (
+            "Weight" in right_col_data[7].values
+            and float(right_col_data[right_col_data[7] == "Weight"][8].values[0]) > 0
+        ):
+            weight = right_col_data[right_col_data[7] == "Weight"][8].values[0]
 
-    position = right_col_data[right_col_data[4] == "Position"][5].values[0]
-    id = right_col_data[right_col_data[4] == "ID"][5].values[0]
+        # in case the weight field is called bodymass
+        if (
+            "Bodymass" in right_col_data[7].values
+            and float(right_col_data[right_col_data[7] == "Bodymass"][8].values[0]) > 0
+        ):
+            weight = right_col_data[right_col_data[7] == "Bodymass"][8].values[0]
 
-    lever_knee = right_col_data[right_col_data[4] == "Hip-Knee Lever"][5].values[0]
-    lever_groin = right_col_data[right_col_data[4] == "Hip-Ankle Lever"][5].values[0]
+        position = right_col_data[right_col_data[4] == "Position"][5].values[0]
+        id = right_col_data[right_col_data[4] == "ID"][5].values[0]
+
+        lever_knee = right_col_data[right_col_data[4] == "Hip-Knee Lever"][5].values[0]
+        lever_groin = right_col_data[right_col_data[4] == "Hip-Ankle Lever"][5].values[
+            0
+        ]
+    except:
+        dob = np.nan
+        gender = np.nan
+        height = np.nan
+        weight = np.nan
+        position = np.nan
+        id = np.nan
+        lever_knee = np.nan
+        lever_groin = np.nan
 
     # extracting software specs
     try:
@@ -410,6 +437,15 @@ def flatten_xlsx(path):
     #     nrs_prev_left = np.nan
     #     nrs_prev_right = np.nan
 
+    try:
+        test_id = (
+            id
+            + test
+            + (id + test + "".join(dateid.split("."))).replace(" ", "").replace(":", "")
+        )
+    except:
+        test_id = np.nan
+
     x = [
         [
             name,
@@ -434,11 +470,7 @@ def flatten_xlsx(path):
             right_max,
             nrs_right,
             nrs_prev_right,
-            id
-            + test
-            + (id + test + "".join(dateid.split(".")))
-            .replace(" ", "")
-            .replace(":", ""),
+            test_id,
             forcemate_version,
             firmware_version,
             hz,
@@ -466,11 +498,7 @@ def flatten_xlsx(path):
             left_max,
             nrs_left,
             nrs_prev_left,
-            id
-            + test
-            + (id + test + "".join(dateid.split(".")))
-            .replace(" ", "")
-            .replace(":", ""),
+            test_id,
             forcemate_version,
             firmware_version,
             hz,
@@ -717,3 +745,6 @@ if uploaded_files is not None:
                 )
     except:
         pass
+# %%
+flatten_xlsx("/Users/franekl/Desktop/Sofia_Blom_200323-16_49_27.xlsx")
+# %%
