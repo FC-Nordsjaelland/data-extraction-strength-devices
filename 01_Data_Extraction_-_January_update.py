@@ -746,5 +746,3 @@ if uploaded_files is not None:
     except:
         pass
 # %%
-flatten_xlsx("/Users/franekl/Desktop/Sofia_Blom_200323-16_49_27.xlsx")
-# %%
