@@ -298,8 +298,18 @@ def percentage_difference(col1, col2):
 
 
 def flatten_xlsx(path):
+
     data = pd.read_excel(path, header=None)
-    data.reset_index()
+
+    if data[0][0] == "Date":
+        pass
+    else:
+        data = data.drop([0])
+
+    data.reset_index(inplace=True)
+
+    if "index" in data.columns:
+        data.drop(["index"], axis=1, inplace=True)
 
     # extract metadata
     metadata = data[[0, 1]].copy()
@@ -754,4 +764,3 @@ if uploaded_files is not None:
                 )
     except:
         pass
-# %%
