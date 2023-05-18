@@ -678,89 +678,89 @@ uploaded_files = st.file_uploader(
     "Upload xlsx files below", type="xlsx", accept_multiple_files=True
 )
 
-if uploaded_files is not None:
-    try:
-        df = preprocess(uploaded_files=uploaded_files)
-        st.write("")
-        st.write("")
-        st.write("")
-        st.write("")
-        joined_df = df_summary(df)
-        AgGrid(joined_df, fit_columns_on_grid_load=True)
+# if uploaded_files is not None:
+try:
+    df = preprocess(uploaded_files=uploaded_files)
+    st.write("")
+    st.write("")
+    st.write("")
+    st.write("")
+    joined_df = df_summary(df)
+    AgGrid(joined_df, fit_columns_on_grid_load=True)
 
-        csv = convert_df(df)
-        st.download_button(
-            "Press to Download the full mastersheet version",
-            csv,
-            "output.csv",
-            "text/csv",
-            key="download-csv",
+    csv = convert_df(df)
+    st.download_button(
+        "Press to Download the full mastersheet version",
+        csv,
+        "output.csv",
+        "text/csv",
+        key="download-csv",
+    )
+
+    st.write("")
+    st.write("")
+
+    with st.form(key="my_form2"):
+        test = st.radio(
+            "Choose a test to visualize", ("Nordic", "Hamstring", "Adduction")
         )
+        sorter = st.radio(
+            "Sort the values by", ("Max right", "Max left", "Mean strength")
+        )
+        if sorter == "Max right":
+            joined_df = joined_df.sort_values(by=["Max right"])
+        elif sorter == "Max left":
+            joined_df = joined_df.sort_values(by=["Max left"])
+        elif sorter == "Mean strength":
+            joined_df = joined_df.sort_values(by=["Mean strength"])
+        submitted = st.form_submit_button(label="Visualize")
 
-        st.write("")
-        st.write("")
+        if test == "Nordic":
+            joined_df = joined_df[joined_df["Test"] == "Nordic"]
+            title = "Nordic"
 
-        with st.form(key="my_form2"):
-            test = st.radio(
-                "Choose a test to visualize", ("Nordic", "Hamstring", "Adduction")
+        elif test == "Hamstring":
+            joined_df = joined_df[joined_df["Test"] == "Hamstring"]
+            title = "Hamstring"
+
+        elif test == "Adduction":
+            joined_df = joined_df[joined_df["Test"] == "Adduction"]
+            title = "Adduction"
+
+        if len(df["team"].unique()) == 1:
+            uniqueteam = df["team"].unique()[0]
+        else:
+            uniqueteam = ""
+
+        if len(df["date"].unique()) == 1:
+            uniquedate = df["date"].unique()[0]
+        else:
+            uniquedate = ""
+
+    if submitted:
+        ax = joined_df.plot(
+            x="Name", y=["Max left", "Max right"], kind="bar", width=0.6
+        )
+        plt.xticks(rotation=75)
+        plt.xlabel("")
+        plt.ylabel("Strength (Newtons)")
+        plt.rcParams.update({"font.size": 6})
+        joined_df["Percentage difference"] = (
+            joined_df["Percentage difference"].astype(str) + " %"
+        )
+        ax.bar_label(ax.containers[0], joined_df["Percentage difference"])
+
+        plt.legend(fontsize=7)
+        plt.title(title + " test " + uniqueteam + " " + uniquedate)
+
+        st.pyplot(fig=plt)
+
+        plt.subplots_adjust(bottom=0.30)
+        fn = "scatter.png"
+        plt.savefig(fn, dpi=1000)
+        with open(fn, "rb") as img:
+            btn = st.download_button(
+                label="Press to Download", data=img, file_name=fn, mime="image/png"
             )
-            sorter = st.radio(
-                "Sort the values by", ("Max right", "Max left", "Mean strength")
-            )
-            if sorter == "Max right":
-                joined_df = joined_df.sort_values(by=["Max right"])
-            elif sorter == "Max left":
-                joined_df = joined_df.sort_values(by=["Max left"])
-            elif sorter == "Mean strength":
-                joined_df = joined_df.sort_values(by=["Mean strength"])
-            submitted = st.form_submit_button(label="Visualize")
-
-            if test == "Nordic":
-                joined_df = joined_df[joined_df["Test"] == "Nordic"]
-                title = "Nordic"
-
-            elif test == "Hamstring":
-                joined_df = joined_df[joined_df["Test"] == "Hamstring"]
-                title = "Hamstring"
-
-            elif test == "Adduction":
-                joined_df = joined_df[joined_df["Test"] == "Adduction"]
-                title = "Adduction"
-
-            if len(df["team"].unique()) == 1:
-                uniqueteam = df["team"].unique()[0]
-            else:
-                uniqueteam = ""
-
-            if len(df["date"].unique()) == 1:
-                uniquedate = df["date"].unique()[0]
-            else:
-                uniquedate = ""
-
-        if submitted:
-            ax = joined_df.plot(
-                x="Name", y=["Max left", "Max right"], kind="bar", width=0.6
-            )
-            plt.xticks(rotation=75)
-            plt.xlabel("")
-            plt.ylabel("Strength (Newtons)")
-            plt.rcParams.update({"font.size": 6})
-            joined_df["Percentage difference"] = (
-                joined_df["Percentage difference"].astype(str) + " %"
-            )
-            ax.bar_label(ax.containers[0], joined_df["Percentage difference"])
-
-            plt.legend(fontsize=7)
-            plt.title(title + " test " + uniqueteam + " " + uniquedate)
-
-            st.pyplot(fig=plt)
-
-            plt.subplots_adjust(bottom=0.30)
-            fn = "scatter.png"
-            plt.savefig(fn, dpi=1000)
-            with open(fn, "rb") as img:
-                btn = st.download_button(
-                    label="Press to Download", data=img, file_name=fn, mime="image/png"
-                )
-    except:
-        pass
+except:
+    pass
