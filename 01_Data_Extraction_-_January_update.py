@@ -579,6 +579,7 @@ def preprocess(uploaded_files):
     df["DoB"] = pd.to_datetime(df["DoB"], format="%Y.%m.%d", errors="coerce").fillna(
         np.nan
     )
+    st.write(df["DoB"])
     mask = pd.notnull(df["DoB"])
     df.loc[mask, "age"] = (
         (df.loc[mask, "date"] - df.loc[mask, "DoB"]) / pd.Timedelta(days=365)
@@ -625,6 +626,7 @@ def preprocess(uploaded_files):
 
 
 def convert_df(df):
+    st.write(df)
     return df.to_csv(index=False, date_format="%m.%d.%Y").encode("utf-8")
 
 
