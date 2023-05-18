@@ -687,7 +687,7 @@ st.write("")
 st.write("")
 joined_df = df_summary(df)
 # AgGrid(joined_df, fit_columns_on_grid_load=True)
-print(joined_df)
+st.write(joined_df)
 
 csv = convert_df(df)
 st.download_button(
