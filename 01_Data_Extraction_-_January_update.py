@@ -576,7 +576,7 @@ def preprocess(uploaded_files):
     df["date"] = pd.to_datetime(df["date"], format="%d.%m.%Y", errors="coerce").fillna(
         np.nan
     )
-    df["DoB"] = pd.to_datetime(df["DoB"], format="%d.%m.%Y", errors="coerce").fillna(
+    df["DoB"] = pd.to_datetime(df["DoB"], format="%Y-%m-%d", errors="coerce").fillna(
         np.nan
     )
 
