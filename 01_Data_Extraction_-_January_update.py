@@ -391,7 +391,6 @@ def flatten_xlsx(path):
         dob = right_col_data[right_col_data[4] == "Date of birth (dd/mm/yyyy)"][
             5
         ].values[0]
-        st.write(dob)
         gender = right_col_data[right_col_data[4] == "Gender"][5].values[0]
         height = right_col_data[right_col_data[4] == "Height"][5].values[0]
         weight = right_col_data[right_col_data[4] == "Weight"][5].values[0]
@@ -577,9 +576,10 @@ def preprocess(uploaded_files):
     df["date"] = pd.to_datetime(df["date"], format="%d.%m.%Y", errors="coerce").fillna(
         np.nan
     )
-    df["DoB"] = pd.to_datetime(df["DoB"], format="%Y.%m.%d", errors="coerce").fillna(
+    df["DoB"] = pd.to_datetime(df["DoB"], format="%d.%m.%Y", errors="coerce").fillna(
         np.nan
     )
+
     mask = pd.notnull(df["DoB"])
     df.loc[mask, "age"] = (
         (df.loc[mask, "date"] - df.loc[mask, "DoB"]) / pd.Timedelta(days=365)
