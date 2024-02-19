@@ -167,8 +167,6 @@ def flatten_xlsx(path):
 
     return player_results
 
-
-flatten_xlsx('../data/jump_test/Andreas_Gulstorff_Pedersen_090224-09_30_15.xlsx')
 #%%
 dir_path = '../data/jump_test'
 # def preprocess(uploaded_files):
