@@ -1,14 +1,8 @@
 #%%
 import pandas as pd
-import io
-import matplotlib.pyplot as plt
 import datetime
 from datetime import time
-import streamlit as st
-from st_aggrid import AgGrid
 import numpy as np
-import seaborn as sns
-import math
 import glob
 import os
 from tqdm import tqdm
@@ -20,7 +14,6 @@ def extract_date_from_filename(filename):
     match = re.search(pattern, filename)
     date = match.group()
     date = date.replace("-","")
-    # Manipulate the extracted date format if needed
     return date
 
 #%%
@@ -118,16 +111,16 @@ def flatten_xlsx(path):
     body_mass = metadata[metadata[3] == "Weight"][4].values[0]
 
     # rsi
-    rsi = results['rsi modified']
+    rsi = round(results.get('rsi modified', np.nan), 3)
 
     # contact_time
-    contact_time = results['contact time']
+    contact_time = round(results.get('contact time', np.nan), 3)
 
     # flight_time
-    flight_time = results['flight time']
+    flight_time = round(results.get('flight time', np.nan), 3)
 
     # flight_height * 100
-    flight_height = results['jump height ft'] * 100
+    flight_height = round(results.get('jump height ft', np.nan) * 100, 3)
 
     # test
     test = metadata[metadata[0] == "Exercise"][1].values[0]
@@ -167,43 +160,50 @@ def flatten_xlsx(path):
 
     return player_results
 
-#%%
+
+def preprocess(dir_path):
+
+    file_names = glob.glob(os.path.join(dir_path, "*.xlsx"))
+
+    players_data = []
+    for file in tqdm(file_names):
+        try:
+            one_player = flatten_xlsx(file)
+            if one_player is not None:
+                players_data.append(one_player)
+        except Exception as e:
+            print(f"Error processing file {file}: {e}")  
+
+    df = pd.DataFrame(
+        players_data,
+        columns=[
+            'internal_id',
+            'date_key',
+            'team_id',
+            'height',
+            'position',
+            'body_mass',
+            'rsi',
+            'contact_time',
+            'flight_time',
+            'flight_height',
+            'test',
+            'type_measure',
+            'forcemate_version',
+            'firmware_version',
+            'hz'
+        ],
+    )
+
+
+    df['date_key'] = pd.to_datetime(df['date_key'])
+    df['date_key'] = df['date_key'].dt.strftime('%Y-%d-%m')
+
+    df = df.dropna(subset=["flight_height"])
+
+    return df
+
 dir_path = '../data/jump_test'
-# def preprocess(uploaded_files):
 
-file_names = glob.glob(os.path.join(dir_path, "*.xlsx"))
-
-
-#%%
-players_data = []
-for file in tqdm(file_names):
-    try:
-        one_player = flatten_xlsx(file)
-        if one_player is not None:
-            players_data.append(one_player)
-    except Exception as e:
-        print(f"Error processing file {file}: {e}")  
-
-df = pd.DataFrame(
-    players_data,
-    columns=[
-         'internal_id',
-        'date_key',
-        'team_id',
-        'height',
-        'position',
-        'body_mass',
-        'rsi',
-        'contact_time',
-        'flight_time',
-        'flight_height',
-        'test',
-        'type_measure',
-        'forcemate_version',
-        'firmware_version',
-        'hz'
-    ],
-)
-
-df = df.dropna(subset=["flight_height"])
+df = preprocess(dir_path=dir_path)
 # %%
