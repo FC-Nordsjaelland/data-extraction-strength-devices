@@ -8,7 +8,6 @@ import os
 from tqdm import tqdm
 import re
 
-#%%
 def extract_date_from_filename(filename):
     pattern = r"\d{6}(?:-)?"
     match = re.search(pattern, filename)
@@ -16,7 +15,6 @@ def extract_date_from_filename(filename):
     date = date.replace("-","")
     return date
 
-#%%
 
 def flatten_xlsx(path):
     data = pd.read_excel(path, header=None)
@@ -43,25 +41,39 @@ def flatten_xlsx(path):
     name_cols = [col for col in [7, 10, 13] if col in jump_test_results.columns]
     value_cols = [col + 1 for col in name_cols]
 
-    jump_height_ft_values = {}
+    # Initialize a dictionary to store 'rsi modified' values
+    rsi_modified_values = {}
+
+    # Iterate over name and value columns to find 'rsi modified' values
     for name_col, value_col in zip(name_cols, value_cols):
         if name_col in jump_test_results and value_col in jump_test_results:
-            mask = jump_test_results[name_col].astype(str) == 'jump height ft'
+            mask = jump_test_results[name_col].astype(str) == 'rsi modified'
             if mask.any():
-                jump_height_ft_values[name_col] = jump_test_results.loc[mask, value_col].values[0]
+                # Extract the first 'rsi modified' value found and round it to 3 decimal places
+                rsi_value = round(jump_test_results.loc[mask, value_col].values[0], 3)
+                rsi_modified_values[name_col] = rsi_value
 
-    if jump_height_ft_values:
-        best_test_col = max(jump_height_ft_values, key=jump_height_ft_values.get)
-        best_test_value_col = best_test_col + 1 
+    # Determine the test with the highest 'rsi modified' value
+    if rsi_modified_values:
+        best_test_col = max(rsi_modified_values, key=rsi_modified_values.get)
+        best_test_value_col = best_test_col + 1
 
+        # Define required parameters to extract
         required_parameters = ['contact time', 'flight time', 'jump height ft', 'rsi modified']
         results = {}
         for param in required_parameters:
             mask = jump_test_results[best_test_col].astype(str) == param
             if mask.any():
-                results[param] = jump_test_results.loc[mask, best_test_value_col].values[0]
+                # Round extracted values to 3 decimal places as needed
+                if param in ['contact time', 'flight time', 'jump height ft']:
+                    results[param] = jump_test_results.loc[mask, best_test_value_col].values[0]
+                else:
+                    # For 'rsi modified', no multiplication by 100 is needed
+                    results[param] = jump_test_results.loc[mask, best_test_value_col].values[0]
     else:
+        # Initialize results with NaN if no 'rsi modified' values were found
         results = {param: np.nan for param in required_parameters}
+
 
 
     # internal_id
@@ -111,16 +123,16 @@ def flatten_xlsx(path):
     body_mass = metadata[metadata[3] == "Weight"][4].values[0]
 
     # rsi
-    rsi = round(results.get('rsi modified', np.nan), 3)
+    rsi = results.get('rsi modified', np.nan)
 
     # contact_time
-    contact_time = round(results.get('contact time', np.nan), 3)
+    contact_time = results.get('contact time', np.nan)
 
     # flight_time
-    flight_time = round(results.get('flight time', np.nan), 3)
+    flight_time = results.get('flight time', np.nan)
 
     # flight_height * 100
-    flight_height = round(results.get('jump height ft', np.nan) * 100, 3)
+    flight_height = results.get('jump height ft', np.nan)
 
     # test
     test = metadata[metadata[0] == "Exercise"][1].values[0]
@@ -186,7 +198,7 @@ def preprocess(dir_path):
             'rsi',
             'contact_time',
             'flight_time',
-            'flight_height',
+            'jump_height',
             'test',
             'type_measure',
             'forcemate_version',
@@ -199,11 +211,22 @@ def preprocess(dir_path):
     df['date_key'] = pd.to_datetime(df['date_key'])
     df['date_key'] = df['date_key'].dt.strftime('%Y-%d-%m')
 
-    df = df.dropna(subset=["flight_height"])
+    df = df.dropna(subset=["jump_height"])
 
     return df
 
 dir_path = '../data/jump_test'
 
 df = preprocess(dir_path=dir_path)
+
+df
+
+df.to_csv("jump_test_results.csv")
 # %%
+df
+# %%
+
+
+
+#if statement if dj
+
